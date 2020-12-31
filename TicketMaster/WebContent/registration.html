@@ -1,39 +1,78 @@
-<html>
-    <head>
-        <meta charset="UTF-8">
-		<script src="jquery-3.3.1.min.js"></script>
-    </head>
-    <body>
-        <form action="#" method="get">
-            <table>
-                <tr>
-                    <td>ime:</td>
-                    <td><input type="text" name="ime"/></td>
-                </tr>
-                <tr>
-                    <td>prezime:</td>
-                    <td><input type="text" name="prezime"/></td>
-                </tr>
-                <tr>
-                    <td>korisnicko ime:</td>
-                    <td><input type="text" name="korisnickoIme"/></td>
-                </tr>
-                <tr>
-                    <td>lozinka:</td>
-                    <td><input type="text" name="lozinka"/></td>
-                </tr>
-                <tr>
-                    <td>email:</td>
-                    <td><input type="text" name="email"/></td>
-                </tr>
-                <tr>
-                    <td>broj telefona:</td>	
-                    <td><input type="text" name="brojTelefona"/></td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center"><input type="submit" value="registruj"/></td>
-                </tr>
-            </table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+
+    <!-- Link The Bootstrap-->
+    <link rel="stylesheet" href="css/bootstrap.css">
+</head>
+<body>
+    <div class="container-md">
+
+        <div class="p-5 text-center">
+            <h1>Registration</h1>
+        </div>
+
+        
+        <form>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input class="form-control" id="username" placeholder="Username">
+                <small id="korisnikHelp" class="form-text text-muted">Your unique user name.</small>
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="password">Passward</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+            </div>
+            
+            <br>
+
+            <div class="row">
+                <div class="col">
+                    <label for="firstname">First Name</label>
+                    <input type="text" id="firstname" class="form-control" placeholder="First name">
+                </div>
+                <div class="col">
+                    <label for="lastname">First Name</label>
+                    <input type="text" id="lastname" class="form-control" placeholder="Last name">
+                </div>
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select class="form-control" id="gender">
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <label for="day">Date of Birth</label>
+                <div class="col">
+                  <input type="text" id="day" class="form-control" placeholder="Day">
+                </div>
+                <div class="col">
+                  <input type="text" id="month" class="form-control" placeholder="Month">
+                </div>
+                <div class="col">
+                    <input type="text" id="year" class="form-control" placeholder="Year">
+                </div>
+            </div>
+
+            <br>
+
+            <button type="submit" class="btn btn-warning">Submit</button>
         </form>
-    </body>
+
+    </div>
+</body>
 </html>
