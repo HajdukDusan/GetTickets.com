@@ -28,14 +28,73 @@ $(document).ready(function(){
             };
         };    
 
+        
+        //check if all fields are not empty
         if(pass == false){
             alert("All fields should have data!");
             event.preventDefault();
-        }
-        else {
-            alert("Registration was succesfull!");
+        };
+
+
+        //check if date of birth is correct
+        if(dayInput < 1) { pass = false};
+
+        switch(monthInput) {
+            case 1:
+                if(dayInput > 31) {pass = false};
+                break;
+            case 2:
+                //if divisible by 4 it is a leap year
+                if(yearInput % 4 == 0) {
+                    if(dayInput > 29) {pass = false};
+                }
+                else {
+                    if(dayInput > 28) {pass = false};
+                };
+                break;
+            case 3:
+                if(dayInput > 31) {pass = false};
+                break;
+            case 4:
+                if(dayInput > 30) {pass = false};
+                break;
+            case 5:
+                if(dayInput > 31) {pass = false};
+                break;
+            case 6:
+                if(dayInput > 30) {pass = false};
+                break;
+            case 7:
+                if(dayInput > 31) {pass = false};
+                break;
+            case 8:
+                if(dayInput > 31) {pass = false};
+                break;
+            case 9:
+                if(dayInput > 30) {pass = false};
+                break;
+            case 10:
+                if(dayInput > 31) {pass = false};
+                break;
+            case 11:
+                if(dayInput > 30) {pass = false};
+                break;
+            case 12:
+                if(dayInput > 31) {pass = false};
+                break;
+            default:
+                pass = false;
         }
 
+        if(pass == false) {
+            alert("Date of birth is not valid!");
+            event.preventDefault();
+            //return;
+        };
+
+        if(pass == true) {
+            alert("Registration was succesfull!");
+        };
     });
 
 
