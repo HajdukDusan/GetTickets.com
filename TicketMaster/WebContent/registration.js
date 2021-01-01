@@ -5,15 +5,17 @@ $(document).ready(function(){
     let firstNameInput  = $("input[id=firstname]").val();
     let lastNameInput   = $("input[id=lastname]").val();
     let genderInput     = $("input[id=gender]").val();
-    let dayInput        = $("input[id=day]").val();
-    let monthInput      = $("input[id=month]").val();
-    let yearInput       = $("input[id=year]").val();
+    
 
     let form = $("form");
     form.submit(function(event){
 
         //this gets all input types
         let allFields = $(':input');
+
+        let dayInput        = $(allFields[5]).val();
+        let monthInput      = $(allFields[6]).val();
+        let yearInput       = $(allFields[7]).val();
 
         let pass = true;
 
@@ -28,60 +30,74 @@ $(document).ready(function(){
             };
         };    
 
-        
+    
+
         //check if all fields are not empty
         if(pass == false){
             alert("All fields should have data!");
             event.preventDefault();
+            return;
         };
 
 
         //check if date of birth is correct
-        if(dayInput < 1) { pass = false};
+        if(dayInput < "1") { pass = false};
 
         switch(monthInput) {
-            case 1:
-                if(dayInput > 31) {pass = false};
+            case "1": {
+                if(dayInput > "31") {pass = false};
                 break;
-            case 2:
+            };
+            case "2": {
                 //if divisible by 4 it is a leap year
                 if(yearInput % 4 == 0) {
-                    if(dayInput > 29) {pass = false};
+                    if(dayInput > "29") {pass = false};
                 }
                 else {
-                    if(dayInput > 28) {pass = false};
+                    if(dayInput > "28") {pass = false};
                 };
                 break;
-            case 3:
-                if(dayInput > 31) {pass = false};
+            };
+            case "3": {
+                if(dayInput > "31") {pass = false};
                 break;
-            case 4:
-                if(dayInput > 30) {pass = false};
+            };
+            case "4": {
+                if(dayInput > "30") {pass = false};
                 break;
-            case 5:
-                if(dayInput > 31) {pass = false};
+            };
+            case "5": {
+                if(dayInput > "31") {pass = false};
                 break;
-            case 6:
-                if(dayInput > 30) {pass = false};
+            };
+            case "6": {
+                if(dayInput > "30") {pass = false};
                 break;
-            case 7:
-                if(dayInput > 31) {pass = false};
+            };
+            case "7": {
+                if(dayInput > "31") {pass = false};
                 break;
-            case 8:
-                if(dayInput > 31) {pass = false};
+            };
+            case "8": {
+                if(dayInput > "31") {pass = false};
                 break;
-            case 9:
-                if(dayInput > 30) {pass = false};
+            };
+            case "9": {
+                if(dayInput > "30") {pass = false};
                 break;
-            case 10:
-                if(dayInput > 31) {pass = false};
+            };
+            case "10": {
+                if(dayInput > "31") {pass = false};
                 break;
-            case 11:
-                if(dayInput > 30) {pass = false};
+            };
+            case "11": {
+                if(dayInput > "30") {pass = false};
                 break;
-            case 12:
-                if(dayInput > 31) {pass = false};
+            };
+            case "12": {
+                if(dayInput > "31") {pass = false};
                 break;
+            };
             default:
                 pass = false;
         }
@@ -89,7 +105,6 @@ $(document).ready(function(){
         if(pass == false) {
             alert("Date of birth is not valid!");
             event.preventDefault();
-            //return;
         };
 
         if(pass == true) {
@@ -98,6 +113,7 @@ $(document).ready(function(){
     });
 
 
+    //color the field white if it is clicked
     $(":input").click(function (e) {
         if (e.target && $(e.target).is('button') == false && $(e.target).css("color") != "white") {
             $(e.target).css("background-color", "white");
