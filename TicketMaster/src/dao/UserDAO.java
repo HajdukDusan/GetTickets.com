@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.BufferedReader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,5 +36,9 @@ public class UserDAO {
 		
 	}
 	
+	private void loadUsers(String path) {
+		BufferedReader in = null;
+		
+	}
 	
 }
