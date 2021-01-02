@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Import JavaScript Files-->
     <script src="jquery-3.3.1.min.js"></script>
     <script src="login.js"></script>
 
@@ -11,9 +12,13 @@
 
     <!-- Link The Bootstrap-->
     <link rel="stylesheet" href="css/bootstrap.css">
+
+    <!-- Import main.css -->
+    <link rel="stylesheet" type="text/css" href="main.css" />
+
 </head>
-<body>
-    <div class="container-md">
+<body style="background-color: black;">
+    <div class="container-md text-light">
 
         <div class="p-5 text-center">
             <h1>Log In</h1>
@@ -23,14 +28,14 @@
         <form>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input class="form-control" id="username" placeholder="Username">
+                <input class="form-control btn-outline-warning" id="username" placeholder="Username" autocomplete="off">
             </div>
 
             <br>
 
             <div class="form-group">
                 <label for="password">Passward</label>
-                <input type="password" class="form-control" id="password" placeholder="Password">
+                <input type="password" class="form-control btn-outline-warning" id="password" placeholder="Password" autocomplete="off">
             </div>     
 
             <br>

@@ -8,29 +8,17 @@
   <script src="jquery-3.3.1.min.js"></script>
   <script src="main.js"></script>
 
+  <!-- Import main.css -->
+  <link rel="stylesheet" type="text/css" href="main.css" />
 
   <title>GetTickets</title>
 
-  <style>
-    [class*="col"] {
-      padding: 1rem;
-      background-color: #FFA900;
-      border: 2px solid #262626;
-      color: #fff;
-      text-align: center;
-    }
 
-    .card:hover{
-      opacity: 0.8;
-      background-color:rgba(255, 200, 35, 0.5);
-}
-
-  </style>
   <!-- Import Bootstrap-->
   <link rel="stylesheet" href="css/bootstrap.css">
+  
 </head>
-<body>
-  <div class="bg-light">
+<body style="background-color: black;">
     
 
 
@@ -53,16 +41,12 @@
       </div>
 
       <!-- buttons types-->
-      <button type="button" class="btn btn-outline-warning">Outline</button>
-      <button type="button" class="btn btn-link">Link</button>
-
-      <button type="button" class="btn btn-warning btn-sm">small</button>
-      <button type="button" class="btn btn-warning" disabled>disabled</button>
+      <button type="button" class="btn btn-warning" disabled>My Account</button>
       
 
 
       <!-- Search Textbox-->
-      <input type="email" class="form-control" id="search" aria-describedby="emailHelp" placeholder="Search">
+      <input type="form-control" class="form-control btn-outline-warning" id="search" aria-describedby="Help" placeholder="Search" autocomplete="off">
 
 
     </div>
@@ -75,7 +59,7 @@
         <div class="card" style="width: 18rem;">
           <a href="event.html" style="text-decoration: none; color:Black">
               <img class="card-img-top" src="https://www.thenittygrittyguide.co/wp-content/uploads/2019/05/hanny-naibaho-388579-unsplash-810x540.jpg" alt="Card image cap">
-              <div class="card-body">
+              <div class="card-body text-light">
                 <h5 class="card-title">Rave</h5>
                 <p class="card-text">Rave in the undergrounds of Novi Sad.</p>
                 <button type="button" class="btn btn-danger">Buy Ticket</button>
@@ -86,7 +70,7 @@
         <div class="card" style="width: 18rem;">
           <a href="event.html" style="text-decoration: none; color:Black">
               <img class="card-img-top" src="https://uploads.sitepoint.com/wp-content/uploads/2016/06/1469245988disco.jpg" alt="Card image cap">
-              <div class="card-body">
+              <div class="card-body text-light">
                 <h5 class="card-title">Disco</h5>
                 <p class="card-text">Disco in Ruma, its bad as it sounds like.</p>
                 <button type="button" class="btn btn-danger">Buy Ticket</button>
@@ -97,22 +81,15 @@
         <div class="card" style="width: 18rem;">
           <a href="event.html" style="text-decoration: none; color:Black">
               <img class="card-img-top" src="https://operaandballet.com/photos_info/person/orchestra/bol_th_symph_orch/big/1453831336.7437.jpg" alt="Card image cap">
-              <div class="card-body">
+              <div class="card-body text-light">
                 <h5 class="card-title">Concert</h5>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 <button type="button" class="btn btn-danger">Buy Ticket</button>
               </div>
           </a>
         </div>
-
       </div>
-    </div>
 
-
-    <!--
-    <script src="https://unpkg.com/@popperjs/core@2.4.0/dist/umd/popper.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-    -->
   </div>
 </body>
 </html>
