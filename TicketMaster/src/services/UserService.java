@@ -17,7 +17,7 @@ import beans.User;
 import dao.CardDAO;
 import dao.ManifestationDAO;
 import dao.UserDAO;
-@Path("/hello")  
+@Path("/user")  
 public class UserService {  
 	@Context
 	HttpServletRequest request;
@@ -27,8 +27,12 @@ public class UserService {
 	@PostConstruct
 	public void init() {
 		if (ctx.getAttribute("userDAO") == null) {
-			String path = "C:\\Users\\Nikola\\eclipse-workspace\\TicketMasterTest\\WebContent\\data\\users.txt";
-			//ctx.setAttribute("userDAO", new UserDAO());
+			String path = "C:\\Users\\Nikola\\eclipse-workspace\\TicketMasterTest\\WebContent\\data\\manifestations.txt";
+			String path1 = "C:\\Users\\Nikola\\eclipse-workspace\\TicketMasterTest\\WebContent\\data\\cards.txt";
+			String path2 = "C:\\Users\\Nikola\\eclipse-workspace\\TicketMasterTest\\WebContent\\data\\users.txt";
+			ManifestationDAO mDAO = new ManifestationDAO(path);
+			CardDAO cDAO = new CardDAO(path1,mDAO);
+			ctx.setAttribute("userDAO", new UserDAO(path2,mDAO,cDAO));
 		}
 	}
 	
@@ -41,11 +45,11 @@ public class UserService {
 	  }  
 	
 	@GET
-	@Path("/getUsers")
+	@Path("/users")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<User> getUsers(){
-		UserDAO uDAO = (UserDAO) ctx.getAttribute("userDAO");
-		return uDAO.findAll();
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		return dao.getUsersList();
 	}
 	
 }   

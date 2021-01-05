@@ -1,4 +1,6 @@
 package services;
+import java.io.File;
+import java.nio.file.FileSystems;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +30,9 @@ public class ManifestationService {
 		if (ctx.getAttribute("manifestationDAO") == null) {
 			String path = "C:\\Users\\Nikola\\eclipse-workspace\\TicketMasterTest\\WebContent\\data\\manifestations.txt";
 			ctx.setAttribute("manifestationDAO", new ManifestationDAO(path));
+	        String userDirectory = new File("").getAbsolutePath();
+	        System.out.println(userDirectory);
+	        System.out.println(userDirectory);
 		}
 	}
 	@GET
@@ -35,7 +40,7 @@ public class ManifestationService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String sayHello() 
 	{
-        return "Hello World";
+        return "Hello Wosdadadrld";
     }
 	@GET
 	@Path("/manifestations")

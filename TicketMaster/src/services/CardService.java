@@ -15,7 +15,7 @@ import beans.Card;
 import beans.Manifestation;
 import dao.CardDAO;
 import dao.ManifestationDAO;
-
+import beans.Manifestation;
 @Path("/card")
 public class CardService {
 
