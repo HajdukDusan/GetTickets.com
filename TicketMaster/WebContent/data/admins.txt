@@ -1,0 +1,2 @@
+role,username,password,name,surname,gender,birth date
+admin,Maja,admin,Maja,Majic,Z,25/7/1967

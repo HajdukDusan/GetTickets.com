@@ -1,0 +1,3 @@
+role,username,password,name,surname,gender,birth date,manifestations(lista ida)
+worker,Mika,123,Mika,Mikic,M,18/7/1986,Exit 2021,Exit 2022,Bajaga Nova Godina 2021,Bunker Svirka,Aca Lukas,Bon Jovi in Novi Sad,Student Party Belgrade,Foam Fest Ruma
+worker,Seka,123,Seka,Aleksic,M,18/7/1986,Exit 2021,Exit 2022,Bajaga Nova Godina 2021,Bunker Svirka,Aca Lukas,Bon Jovi in Novi Sad,Student Party Belgrade,Foam Fest Ruma
