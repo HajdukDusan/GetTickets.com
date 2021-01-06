@@ -1,0 +1,16 @@
+id,manifestation by name +date,price,buyers name,buyers surname, status, card type
+0000000100,Exit 2021,150,Pera,Peric,true,REGULAR
+0000001100,Exit 2022,160,Igor,Igic,false,REGULAR
+0000011100,Bunker Svirka,50,Igor,Igic,false,REGULAR
+0000111100,Bon Jovi in Novi Sad,100,Pera,Peric,false,REGULAR
+0001111100,Aca Lukas,60,Marija,Maric,false,REGULAR
+0011111100,Aca Lukas,60,Marko,Markovic,false,REGULAR
+0111111100,Aca Lukas,70,Mitar,Mitrovic,false,REGULAR
+1111111100,Bon Jovi in Novi Sad,100,Simbad,Simeon,false,REGULAR
+1111111200,Bon Jovi in Novi Sad,80,Ivan,Janjic,false,REGULAR
+1111111300,Bon Jovi in Novi Sad,120,Ivan,Janjic,true,REGULAR
+1111111400,Bon Jovi in Novi Sad,100,Marija,Maric,false,REGULAR
+1111111500,Bon Jovi in Novi Sad,80,Marija,Maric,false,REGULAR
+1111111600,Bon Jovi in Novi Sad,120,Marija,Maric,true,REGULAR
+1111111700,Bunker Svirka,50,Mitar,Mitrovic,false,REGULAR
+1111111800,Bon Jovi in Novi Sad,100,Simbad,Simeon,false,REGULAR

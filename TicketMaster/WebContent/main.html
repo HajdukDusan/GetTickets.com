@@ -3,27 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GetTickets</title>
 
-  <style>
-    [class*="col"] {
-      padding: 1rem;
-      background-color: #FFA900;
-      border: 2px solid #262626;
-      color: #fff;
-      text-align: center;
-    }
+  <!-- Import JavaScript Files-->
+  <script src="jquery-3.3.1.min.js"></script>
+  <script src="main.js"></script>
 
-    .card:hover{
-      opacity: 0.8;
-      background-color:rgba(255, 200, 35, 0.5);
-}
+  <!-- Import main.css -->
+  <link rel="stylesheet" type="text/css" href="main.css" />
 
-  </style>
+  <title>TicketMaster</title>
+
+
+  <!-- Import Bootstrap-->
   <link rel="stylesheet" href="css/bootstrap.css">
+  
 </head>
-<body>
-  <div class="bg-light">
+<body style="background-color: black;">
     
 
 
@@ -46,59 +41,21 @@
       </div>
 
       <!-- buttons types-->
-      <button type="button" class="btn btn-outline-warning">Outline</button>
-      <button type="button" class="btn btn-link">Link</button>
-
-      <button type="button" class="btn btn-warning btn-sm">small</button>
-      <button type="button" class="btn btn-warning" disabled>disabled</button>
+      <button type="button" class="btn btn-warning" disabled>My Account</button>
       
 
-       <!-- Search Textbox-->
-       <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search">
+
+      <!-- Search Textbox-->
+      <input type="form-control" class="form-control btn-outline-warning" id="search" aria-describedby="Help" placeholder="Search" autocomplete="off">
 
 
     </div>
     
 
     <!-- Cards -->
-    <div class="container-md">
-      <div class="card-group my-3">
-        
-        <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8aHVtYW58ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <button type="button" class="btn btn-danger">Buy Ticket</button>
-          </div>
-        </div>
-
-        <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8aHVtYW58ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <button type="button" class="btn btn-danger">Buy Ticket</button>
-          </div>
-        </div>
-
-        <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8aHVtYW58ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <button type="button" class="btn btn-danger">Buy Ticket</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
+    <div class="container-md" id="cards_container">
 
 
-
-    <script src="https://unpkg.com/@popperjs/core@2.4.0/dist/umd/popper.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-
-  </div>
+	</div>
 </body>
 </html>

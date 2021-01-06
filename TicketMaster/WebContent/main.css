@@ -1,0 +1,80 @@
+#clicked {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    width: 100%;
+    background-color: #ecb21f;
+    border-color: #a88734 #9c7e31 #846a29;
+    color: black;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 13px
+}
+
+#profile {
+    background-color: unset
+}
+
+body {
+    background-color: black
+}
+
+#nav-items li a,
+#profile {
+    text-decoration: none;
+    color: rgb(224, 219, 219);
+    background-color: black
+}
+
+
+.comment h4,
+.comment span,
+.darker h4,
+.darker span {
+    display: inline
+}
+
+.comment p,
+.comment span,
+.darker p,
+.darker span {
+    color: rgb(184, 183, 183)
+}
+
+h1,
+h4 {
+    color: #FFA900;
+    font-weight: bold;
+}
+
+p {
+    text-align: left;
+}
+
+#align-form {
+    margin-top: 20px
+}
+
+.form-group p a {
+    color: white
+}
+
+.form-group input,
+.form-group textarea {
+    background-color: black;
+    border-radius: 12px;
+}
+
+.card {
+    background-color: rgba(0, 0, 0, 1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.card:hover{
+    background-color: #FFA900 !important;
+}
+
+#search, input, .form-control{
+    background-color: black !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #FFA900 !important;
+}

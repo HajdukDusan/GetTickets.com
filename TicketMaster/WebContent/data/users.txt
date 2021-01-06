@@ -1,0 +1,11 @@
+role,username,password,name,surname,gender,birth date,collected points,user type, purchased cards(lista id karti)
+user,Pera,123,Pera,Peric,M,5/7/1999,23,BRONZE,0000000100;0000111100
+user,Igor,123,Igor,Igic,M,6/7/1979,23,BRONZE,0000001100;0000011100
+user,Marija,123,Marija,Maric,M,2/7/1989,23,SILVER,0001111100;1111111400;1111111500;1111111600
+user,Marko,123,Marko,Markovic,M,1/8/2000,23,BRONZE,0011111100
+user,Mitar,123,Mitar,Mitrovic,M,7/7/1999,23,SILVER,0111111100;1111111700
+user,Simbad,123,Simbad,Simeon,M,10/10/1999,23,BRONZE,1111111100;1111111800
+user,Ivan,123,Ivan,Janjic,M,8/8/1960,23,BRONZE,1111111200
+worker,Mika,123,Mika,Mikic,M,18/7/1986,Exit 2021;Exit 2022;Bajaga Nova Godina 2021;Bunker Svirka;Aca Lukas;Bon Jovi in Novi Sad;Student Party Belgrade;Foam Fest Ruma
+worker,Seka,123,Seka,Aleksic,M,18/7/1986,Exit 2021,Exit 2022;Bajaga Nova Godina 2021
+admin,Maja,admin,Maja,Majic,Z,25/7/1967
