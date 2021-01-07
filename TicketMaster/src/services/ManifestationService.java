@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.websocket.server.PathParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -28,7 +29,7 @@ public class ManifestationService {
 	@PostConstruct
 	public void init() {
 		if (ctx.getAttribute("manifestationDAO") == null) {
-			String path = "C:\\Users\\Nikola\\eclipse-workspace\\TicketMasterTest\\WebContent\\data\\manifestations.txt";
+			String path = "C:\\Users\\Hajduk\\Desktop\\WebShopREST\\WebContent\\data\\manifestations.txt";
 			ctx.setAttribute("manifestationDAO", new ManifestationDAO(path));
 	        String userDirectory = new File("").getAbsolutePath();
 	        System.out.println(userDirectory);
@@ -48,5 +49,13 @@ public class ManifestationService {
 	public Collection<Manifestation> getManifestations(){
 		ManifestationDAO dao = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
 		return dao.getManifestationsList();
+	}
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Manifestation findOne(@PathParam("id") String id){
+		
+		ManifestationDAO dao = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
+		return dao.getManifestations().get(id);
 	}
 }
