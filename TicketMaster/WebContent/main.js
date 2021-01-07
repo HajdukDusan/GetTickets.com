@@ -1,6 +1,12 @@
 $(document).ready(function(){
 
-    var baseurl = "http://localhost:8080/TicketMasterTest/rest/manifestation/manifestations";
+    function someFunction(event) {
+        localStorage.setItem("clickedID", jQuery(this).attr("id"));
+        window.location = "event.html";
+    }
+
+
+    var baseurl = "http://localhost:8080/TicketMaster/rest/manifestation/manifestations";
 
 
 
@@ -8,23 +14,26 @@ $(document).ready(function(){
 		type : 'GET',
 		url : baseurl,
 		dataType : "json", // data type of response
+		async: false,
 		success : function(data) {
             var html = '<div class="card-group my-3">';
 
             for( var i=0; i <data.length; i++) {
+                let str = data[i].name;
+                str = str.replace(/ /g, '_');
                 html +=
                     `
-                    <div class="card" style="width: 18rem;">
-                        <a href="event.html" style="text-decoration: none; color:Black">
-                            <img class="card-img-top" src="https://www.thenittygrittyguide.co/wp-content/uploads/2019/05/hanny-naibaho-388579-unsplash-810x540.jpg" alt="Card image cap">
-                            <div class="card-body text-light">
-                            <h5 class="card-title">` + data[i].name + `<div class="text-muted float-end">` + data[i].dateTime + `</div></h5>
-                            
-                            <p class="card-text">TREBA UNETI OPIS MANIFESTACIJE</p>
-                            <button type="button" class="btn btn-danger">Price: ` + data[i].regularPrice + `€</button>
-                            </div>
-                        </a>
+                    <div class="card" id="`+ str +`" style="width: 18rem;">
+                        <img class="card-img-top" src="https://www.thenittygrittyguide.co/wp-content/uploads/2019/05/hanny-naibaho-388579-unsplash-810x540.jpg" alt="Card image cap">
+                        <div class="card-body text-light">
+                        <h5 class="card-title">` + data[i].name + `<div class="text-muted float-end">` + data[i].dateTime + `</div></h5>
+                        
+                        <p class="card-text">TREBA UNETI OPIS MANIFESTACIJE</p>
+                        <button type="button" class="btn btn-danger">Price: ` + data[i].regularPrice + `€</button>
+                        </div>
                     </div>`;
+
+                //alert(str);
 
                 if( (i+1) % 3 == 0){
 
@@ -34,14 +43,19 @@ $(document).ready(function(){
 
             html += "</div>";
             $("#cards_container").html(html);
+
+            for(let i = 0; i < data.length; i++) {
+                let str = data[i].name;
+                str = str.replace(/ /g, '_');
+                document.getElementById(str).addEventListener("click", someFunction);
+            }
+            
             
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("AJAX ERROR: " + errorThrown);
 		}
 	});
-
-
 
     //Typing In Search Event
     $('input').on('keyup', function() {
