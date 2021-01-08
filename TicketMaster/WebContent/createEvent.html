@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Import JavaScript Files-->
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="createEvent.js"></script>
+ 
+    <title>TicketMaster</title>
+
+    <!-- Import main.css -->
+    <link rel="stylesheet" type="text/css" href="main.css" />
+
+    <!-- Import Bootstrap-->
+    <link rel="stylesheet" href="css/bootstrap.css">
+
+</head>
+<body style="background-color: black;">
+    <div class="container-md text-light">
+
+
+
+        <form action="#" method="get">
+
+            <div class="p-5 text-center">
+                <h1>Create Event</h1>
+            </div>
+
+
+            <!-- Event Name-->
+            <div class="form-group">
+                <label for="name">Event Name</label>
+                <input class="form-control btn-outline-warning" id="name" placeholder="Event Name" autocomplete="off">
+                <small id="korisnikHelp" class="form-text text-muted">The unique name of the event.</small>
+            </div>
+
+            <br>
+
+            <!-- Description-->
+            <div class="form-group">
+                <label for="description">Event Description</label>
+                <textarea name="msg" id="description" msg cols="30" rows="5" class="form-control btn-outline-warning" placeholder="Event Description" style="background-color: black;"></textarea>
+                <small id="descHelp" class="form-text text-muted">Tell people more about the event.</small>
+            </div>
+
+            <br>
+
+            <!-- Type -->
+            <div class="form-group">
+                <label for="type">Event Type</label>
+                <select class="form-control btn-outline-warning" id="type">
+                  <option>Concert</option>
+                  <option>Festival</option>
+                  <option>Gig</option>
+                  <option>Party</option>
+                  <option>Other</option>
+                </select>
+            </div>
+
+            <br>
+
+            <!-- Number of Seats-->
+            <div class="form-group">
+                <label for="seats">Number of Seats</label>
+                <input class="form-control btn-outline-warning" id="seats" placeholder="Number of Seats" autocomplete="off">
+            </div>
+
+            <br>
+
+            <!-- Time and Date -->
+            <div class="row">
+                <label for="hours">Time And Date</label>
+                <div class="col">
+                    <input class="form-control btn-outline-warning" type="text" id="hours" placeholder="Hour" autocomplete="off">
+                </div>
+                <div class="col">
+                    <input class="form-control btn-outline-warning" type="text" id="minutes" placeholder="Minutes" autocomplete="off">
+                </div>
+
+                <div class="col">
+                    <input class="form-control btn-outline-warning" type="text" id="day" placeholder="Day" autocomplete="off">
+                </div>
+                <div class="col">
+                    <input class="form-control btn-outline-warning" type="text" id="month" placeholder="Month" autocomplete="off">
+                </div>
+                <div class="col">
+                    <input class="form-control btn-outline-warning" type="text" id="year" placeholder="Year" autocomplete="off">
+                </div>
+            </div>
+
+            <br>
+
+            <!-- Price -->
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input class="form-control btn-outline-warning" id="price" placeholder="Price (Euro)" autocomplete="off">
+            </div>
+
+            <br>
+            <!-- Location -->
+
+
+
+            <br>
+
+            <!-- Import Image -->
+            <label for="image">Event Poster Image</label>
+
+            <div class="form-group file_up_area">
+                <label class="btn btn-warning">
+                    Upload Image<input type="file" id="fileUp" name="" hidden>
+                </label>
+            </div>
+
+            <br>
+
+            <!-- Img Area -->
+            <div class="file_area" id="image">
+                <img src="" id = "imageFile">
+            </div>
+
+            <br>
+
+            <!--
+            <h3>Base64 data</h3>
+            <div class="file_area">
+                <textarea id="Base64Data"></textarea>
+            </div>
+            -->
+
+            <button type="submit" class="btn btn-warning">Create Event</button>
+        </form>
+    </div>
+
+</body>
+</html>
