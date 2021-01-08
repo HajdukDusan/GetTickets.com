@@ -8,8 +8,6 @@ $(document).ready(function(){
 
     var baseurl = "http://localhost:8080/TicketMaster/rest/manifestation/manifestations";
 
-
-
     $.ajax({
 		type : 'GET',
 		url : baseurl,
@@ -24,7 +22,7 @@ $(document).ready(function(){
                 html +=
                     `
                     <div class="card" id="`+ str +`" style="width: 18rem;">
-                        <img class="card-img-top" src="https://www.thenittygrittyguide.co/wp-content/uploads/2019/05/hanny-naibaho-388579-unsplash-810x540.jpg" alt="Card image cap">
+                        <img class="card-img-top" src="`+ data[i].eventPoster +`" alt="Card image cap">
                         <div class="card-body text-light">
                         <h5 class="card-title">` + data[i].name + `<div class="text-muted float-end">` + data[i].dateTime + `</div></h5>
                         
