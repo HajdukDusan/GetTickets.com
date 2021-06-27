@@ -1,0 +1,31 @@
+Exit 2022,Festival,12000,31-06-2022 23:37,160,true,-46.32584,-179.63246,Harangszó u. 13,Pécs,7631,Exit Poster,sadasd,true
+Bajaga Nova Godina 2021,Concert,7000,31-12-2020 12:12,160,true,52.82369,36.72477,Harangszó u. 13,Pécs,7631,New Year Poster,sadasd,true
+Bunker Svirka,Gig,300,10-01-2021 10:10,160,true,52.82369,36.72477,Pécs,Harangszó u. 13,Pécs,7631,Bunker Poster,sadasd, true
+Aca Lukas,Concert,2000,15-01-2021 10:00,160,true,52.82369,36.72477,Harangszó u. 13,Pécs,7631,Acin Poster,sadasd,true
+Bon Jovi in Novi Sad,Concert,3000,26-01-2021 18:00,160,true,52.82369,36.72477,Harangszó u. 13,Pécs,7631,Bon Jovi Poster,sadasd,true
+Student Party Belgrade,Party,2000,24-01-2021 20:00,160,true,52.82369,36.72477,Harangszó u. 13,Pécs,7631,Studnet Party Poster,sadasd,true
+Foam Fest Ruma,Festival,4500,20-02-2021 22:00,160,true,52.82369,36.72477,Harangszó u. 13,Pécs,7631,Foam Fest Poster,sadasd,true
+0000011100,Bunker Svirka,50,Igor,Igic,false,REGULAR,true
+0000111100,Bon Jovi in Novi Sad,100,Pera,Peric,false,REGULAR,true
+0001111100,Aca Lukas,60,Marija,Maric,false,REGULAR,true
+0011111100,Aca Lukas,60,Marko,Markovic,false,REGULAR,true
+0111111100,Aca Lukas,70,Mitar,Mitrovic,false,REGULAR,true
+1111111100,Bon Jovi in Novi Sad,100,Simbad,Simeon,false,REGULAR,true
+1111111200,Bon Jovi in Novi Sad,80,Ivan,Janjic,false,REGULAR,true
+1111111300,Bon Jovi in Novi Sad,120,Ivan,Janjic,true,REGULAR,true
+1111111400,Bon Jovi in Novi Sad,100,Marija,Maric,false,REGULAR,true
+1111111500,Bon Jovi in Novi Sad,80,Marija,Maric,false,REGULAR,true
+1111111600,Bon Jovi in Novi Sad,120,Marija,Maric,true,REGULAR,true
+1111111700,Bunker Svirka,50,Mitar,Mitrovic,false,REGULAR,true
+1111111800,Bon Jovi in Novi Sad,100,Simbad,Simeon,false,REGULAR,true
+role,username,password,name,surname,gender,birth date,collected points,user type, purchased cards(lista id karti)
+user,Pera,123,Pera,Peric,M,5/7/1999,23,BRONZE,0000000100;0000111100,true
+user,Igor,123,Igor,Igic,M,6/7/1979,23,BRONZE,0000001100;0000011100,true
+user,Marija,123,Marija,Maric,M,2/7/1989,23,SILVER,0001111100;1111111400;1111111500;1111111600,true
+user,Marko,123,Marko,Markovic,M,1/8/2000,23,BRONZE,0011111100,true
+user,Mitar,123,Mitar,Mitrovic,M,7/7/1999,23,SILVER,0111111100;1111111700,true
+user,Simbad,123,Simbad,Simeon,M,10/10/1999,23,BRONZE,1111111100;1111111800,true
+user,Ivan,123,Ivan,Janjic,M,8/8/1960,23,BRONZE,1111111200,true
+worker,Mika,123,Mika,Mikic,M,18/7/1986,Exit 2021;Exit 2022;Bajaga Nova Godina 2021;Bunker Svirka;Aca Lukas;Bon Jovi in Novi Sad;Student Party Belgrade;Foam Fest Ruma,true
+worker,Seka,123,Seka,Aleksic,M,18/7/1986,Exit 2021,Exit 2022;Bajaga Nova Godina 2021,true
+admin,Maja,admin,Maja,Majic,Z,25/7/1967,true
