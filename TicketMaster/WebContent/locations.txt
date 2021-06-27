@@ -1,3 +1,0 @@
-longitude,latitude,address
-52.82369,36.72477,Pécs,Harangszó u. 13, 7631 Hungary
--46.32584,-179.63246,Harangszó u. 14, 7632 Hungary

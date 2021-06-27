@@ -1,9 +1,0 @@
-name,manifestation type,number of seats, date and time, regular price, status, location, event poster
-Exit 2021,Festival,12000,17-06-2021 23:37,150,true,52.82369,36.72477,Harangszó u. 13,Pécs,7631,Exit Poster
-Exit 2022,Festival,12000,31-06-2022 23:37,160,true,-46.32584,-179.63246,Harangszó u. 13,Pécs,7631,Exit Poster
-Bajaga Nova Godina 2021,Concert,7000,31-12-2020 12:12,160,true,52.82369,36.72477,Harangszó u. 13,Pécs,7631,New Year Poster
-Bunker Svirka,Gig,300,10-01-2021 10:10,160,true,52.82369,36.72477,Pécs,Harangszó u. 13,Pécs,7631,Bunker Poster
-Aca Lukas,Concert,2000,15-01-2021 10:00,160,true,52.82369,36.72477,Harangszó u. 13,Pécs,7631,Acin Poster
-Bon Jovi in Novi Sad,Concert,3000,26-01-2021 18:00,160,true,52.82369,36.72477,Harangszó u. 13,Pécs,7631,Bon Jovi Poster
-Student Party Belgrade,Party,2000,24-01-2021 20:00,160,true,52.82369,36.72477,Harangszó u. 13,Pécs,7631,Studnet Party Poster
-Foam Fest Ruma,Festival,4500,20-02-2021 22:00,160,true,52.82369,36.72477,Harangszó u. 13,Pécs,7631,Foam Fest Poster
