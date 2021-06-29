@@ -16,7 +16,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import beans.Manifestation;
 import beans.User;
 import dao.CardDAO;
 import dao.ManifestationDAO;
@@ -107,41 +106,4 @@ public class UserService {
 		}
 		 return Response.ok(username+"-"+password+ "." + dao.findUser(username).getRole(), MediaType.APPLICATION_JSON).build();
 	}
-	
-	@GET
-	@Path("/test")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String sayHello() 
-	{
-        String actualPath = ctx.getRealPath("/");
-        System.out.println(actualPath);
-        return "Hello Wosdadadrld";
-    }
-	
-	@GET
-	@Path("/usersSeached/ime={ime}/prezime={prezime}/korisnickoIme={korisnickoIme}/tipKorisnika={tipKorisnika}"
-			+ "/desc={desc}/sortBy={sortBy}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<User> getUsersNaziv(@PathParam("ime") String ime, @PathParam("prezime") String prezime,
-			@PathParam("korisnickoIme") String korisnickoIme, @PathParam("tipKorisnika") String tipKorisnika,
-			@PathParam("desc") boolean desc, @PathParam("sortBy") String sortBy){
-		
-		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
-		if(ime.equals("\"\"")) {
-			ime = "";
-		}
-		if(prezime.equals("\"\"")) {
-			prezime = "";
-		}
-		if(korisnickoIme.equals("\"\"")) {
-			korisnickoIme = "";
-		}
-		if(tipKorisnika.equals("\"\"")) {
-			tipKorisnika = "";
-		}
-
-		return dao.getUsersSearched(ime, prezime, korisnickoIme, tipKorisnika, desc, sortBy);
-	}
-	
 }   
