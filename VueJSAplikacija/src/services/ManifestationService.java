@@ -5,17 +5,21 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.FileSystems;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
+
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -33,9 +37,11 @@ import dao.UserDAO;
 @Path("/manifestation")
 public class ManifestationService {
 
-	
 	@Context
 	ServletContext ctx;
+	
+	
+	public static String path_image = "";
 	
 	public ManifestationService() {
 		// TODO Auto-generated constructor stub
@@ -47,7 +53,6 @@ public class ManifestationService {
 			System.out.println(actualPath);
 			String path = actualPath + "data\\manifestations.txt";
 			ctx.setAttribute("manifestationDAO", new ManifestationDAO(path));
-	        String userDirectory = new File("").getAbsolutePath();
 		}
 	}
 	@GET
@@ -81,6 +86,53 @@ public class ManifestationService {
 		}
 		return dao.getManifestationsSearched(naziv,grad,min,max);
 	}
+    @POST
+    @Path("/upload")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response sendFile(String value) throws IOException{
+        String[] strings = value.split(",");
+        String extension;
+        switch (strings[0]) {//check image's extension
+            case "data:image/jpeg;base64":
+                extension = "jpeg";
+                break;
+            case "data:image/png;base64":
+                extension = "png";
+                break;
+            default://should write cases for more images types
+                extension = "jpg";
+                break;
+        }
+        //convert base64 string to binary data
+        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
+        String fileName = "";
+        Random rn = new Random();
+        for(int i = 0;i<10;i++) {
+        	fileName = fileName + rn.nextInt(9) + 9;
+        }
+        String path = "C:\\Users\\Win10\\git\\TicketMaster\\VueJSAplikacija\\WebContent\\images\\" +fileName + "." + extension;
+        //String path =  ctx.getRealPath("/") + "images\\" +fileName + "." + extension;
+        File file = new File(path);
+        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
+            outputStream.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        path_image = "images\\"+fileName + "." + extension;
+        System.out.println(path_image);
+        path =  "images\\"+fileName + "." + extension;
+        return Response.ok(path, MediaType.APPLICATION_JSON).build();
+    }
+	@GET
+	@Path("/manifestationsWorker/cookie={cookie}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Manifestation> getManifestationsWorker(@PathParam(value = "cookie") String cookie){
+		ManifestationDAO dao = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
+		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
+		User worker = userDAO.findUser(cookie.split("-")[0]);
+		return dao.getManifestationsWorker(worker.getManifestationsIds());
+		
+	}
 	@GET
 	@Path("/manifestations")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -97,12 +149,24 @@ public class ManifestationService {
 		return dao.getManifestations().get(id);
 	}
 	@POST
+	@Path("/updateManifestation")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateManifestation(Manifestation manifestation) throws IOException {
+		ManifestationDAO dao = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
+		dao.updateManifestation(manifestation);
+		return Response.ok("",MediaType.APPLICATION_JSON).build();
+		
+       // manifestation.setEventPoster("images\\test" + extension);
+	}
+	@POST
 	@Path("/saveManifestation")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response saveManifestation(Manifestation manifestation) throws IOException {
 		ManifestationDAO dao = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
-		System.out.println(manifestation);
+		System.out.println(path_image);
+		manifestation.setEventPoster(path_image);
 		if(!dao.saveManifestation(manifestation)) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Vec postoji manifestaciji na ovoj lokaciji u datom vremenu").build();
 		}

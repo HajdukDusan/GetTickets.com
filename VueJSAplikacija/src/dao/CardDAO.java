@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import beans.Card;
 
@@ -34,7 +35,7 @@ public class CardDAO {
 			while ((line = in.readLine()) != null) {
 				params = line.split(",");
 				Boolean status = Boolean.parseBoolean(params[5]);
-				Card c = new Card(params[0],mDAO.getManifestations().get(params[1]), mDAO.getManifestations().get(params[1]).getDateTime(), params[2], params[3],params[4],status,params[6]);
+				Card c = new Card(params[0], params[1], mDAO.getManifestations().get(params[1]).getDateTime(), params[2], params[3],params[4],status,params[6]);
 				
 				cards.put(params[0],c);
 				cardsList.add(c);
@@ -50,6 +51,18 @@ public class CardDAO {
 				catch (Exception e) { }
 			}
 		}
+	}
+	public List<Card> getUserCards(List<String> cardIds){
+		ArrayList<Card> userCards = new ArrayList<Card>();
+		for(String s: cardIds) {
+			System.out.println(cards.get(s).isStatus());
+			if(cards.get(s).isStatus()) {
+				userCards.add(cards.get(s));
+			}
+
+		}
+		return userCards;
+		
 	}
 	public HashMap<String, Card> getCards() {
 		return cards;

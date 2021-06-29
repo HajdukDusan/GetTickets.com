@@ -45,12 +45,13 @@ Vue.component("login", {
           this.role = response.data.split(".")[1];
           localStorage.setItem("role", this.role);
           if (this.role === "user") {
-            this.$router.push("/home-korisnik");
+            this.$router.push("/");
           } else if (this.role === "admin") {
-            this.$router.push("/home-admin");
+            this.$router.push("/");
           } else if (this.role === "worker") {
-            this.$router.push("/home-worker");
+            this.$router.push("/");
           }
+          onSubmit();
         })
         .catch((error) => {
           console.log("Greska.");

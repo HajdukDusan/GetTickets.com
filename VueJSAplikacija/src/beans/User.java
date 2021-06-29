@@ -24,9 +24,10 @@ public class User {
 	private String collectedPoints;
 	private String role;
 	private ArrayList<Card> pCards;
+	private ArrayList<String> pCardsIds;
 	private ArrayList<Manifestation> manifestations;
 	private ArrayList<String> manifestationsIds;
-	
+	private ArrayList<String> comments;
 	
 	public User() {
 	}
@@ -45,6 +46,7 @@ public class User {
 		this.collectedPoints = collectedPoints;
 		this.pCards = new ArrayList<Card>();
 		this.pCards = pCards;
+		this.pCardsIds = new ArrayList<String>();
 		this.userType = userType;
 		this.manifestations = null;
 		
@@ -83,6 +85,12 @@ public class User {
 		this.userType = null;
 	}
 	
+	public ArrayList<String> getpCardsIds() {
+		return pCardsIds;
+	}
+	public void setpCardsIds(ArrayList<String> pCardsIds) {
+		this.pCardsIds = pCardsIds;
+	}
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -150,7 +158,7 @@ public class User {
 	public String toString() {
 		return "User [username=" + username + ", password=" + password + ", name=" + name + ", surname=" + surname
 				+ ", gender=" + gender + ", birthDate=" + birthDate + ", userType=" + userType + ", collectedPoints="
-				+ collectedPoints + ", role=" + role + ", pCards=" + pCards + ", manifestations=" + manifestations
+				+ collectedPoints + ", role=" + role + ", pCards=" + pCardsIds + ", manifestations=" + manifestationsIds
 				+ "]";
 	}
 }

@@ -8,17 +8,15 @@ public class Card {
 	}
 	
 	private String id;
-	private Manifestation manifestation;
+	private String manifestation;
 	private Date manifestationDate;
 	private String price;
 	private String buyersName;
 	private String buyersSurname;
 	private boolean status;
 	private String cardType;
-	public Card() {
-		// TODO Auto-generated constructor stub
-	}
-	public Card(String id, Manifestation manifestation, Date manifestationDate, String price, String buyersName,
+	
+	public Card(String id, String manifestation, Date manifestationDate, String price, String buyersName,
 			String buyersSurname, boolean status, String cardType) {
 		super();
 		this.id = id;
@@ -36,10 +34,10 @@ public class Card {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public Manifestation getManifestation() {
+	public String getManifestation() {
 		return manifestation;
 	}
-	public void setManifestation(Manifestation manifestation) {
+	public void setManifestation(String manifestation) {
 		this.manifestation = manifestation;
 	}
 	public Date getManifestationDate() {

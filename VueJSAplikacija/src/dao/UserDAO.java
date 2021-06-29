@@ -114,30 +114,41 @@ public class UserDAO {
 		Date date = new SimpleDateFormat("dd/MM/yyyy").parse(data[6]);
 		
 		UserType userType = new UserType(data[8]);
-		
 		ArrayList<Card> pCards = new ArrayList<Card>();
-		if(!(data[9].equals(""))) {
-			String[] cardIds = data[9].split(";");
-			for(int i = 0;i < cardIds.length - 1;i++) {
-				System.out.println(cardIds[i]);
-				Card c = allCards.get(cardIds[i]);
-				pCards.add(c);
+		ArrayList<String> pCardsIds = new ArrayList<String>();
+		if(data.length == 11) {
+			if(!(data[10].equals(""))) {
+				String[] cardIds = data[10].split(";");
+				for(String s: cardIds) {
+					System.out.println(s);
+					Card c = allCards.get(s);
+					pCards.add(c);
+					pCardsIds.add(c.getId());
+				}
 			}
 		}
-		User user = new User(data[0],data[1],data[2],data[3],data[4],data[5],date,data[7],userType,pCards);
+
 		
+		User user = new User(data[0],data[1],data[2],data[3],data[4],data[5],date,data[7],userType,pCards);
+		user.setpCardsIds(pCardsIds);
 		return user;
 	}
 	
 	private User generateWorker(String[] data,HashMap<String, Manifestation> allManifestations) throws ParseException{
 		ArrayList<Manifestation> manifestations = new ArrayList<Manifestation>();
-		String[] manifestationIds = data[7].split(";");
-		for(int i = 0;i < manifestationIds.length - 1;i++) {
-			Manifestation m = allManifestations.get(manifestationIds[i]);
-			manifestations.add(m);
+		ArrayList<String> manifestationsIds = new ArrayList<String>();
+		String[] manifestationNames = data[8].split(";");
+		for(String s: manifestationNames) {
+			System.out.println(s);
+		}
+		for(String s:manifestationNames) {
+			
+			Manifestation m = allManifestations.get(s);
+			manifestationsIds.add(m.getName());
 		}
 		Date date = new SimpleDateFormat("dd/MM/yyyy").parse(data[6]);
 		User worker = new User(data[0],data[1],data[2],data[3],data[4],data[5],date,manifestations);
+		worker.setManifestationsIds(manifestationsIds);
 		return worker;
 	}
 	
@@ -165,5 +176,57 @@ public class UserDAO {
 
 	public void setUsersList(ArrayList<User> usersList) {
 		this.usersList = usersList;
+	}
+	public ArrayList<User> getUsersSearched(String ime,String prezime, String korisnickoIme,String tipKorisnika, boolean desc, String sortBy) {
+		ArrayList<User> usersSearched = new ArrayList<User>();
+		for(User m:usersList) {
+			if((m.getName().toLowerCase().contains(ime.toLowerCase()) || ime.equals(""))
+				&& (m.getSurname().toLowerCase().contains(prezime.toLowerCase()) || prezime.equals(""))
+				&& (m.getUsername().toLowerCase().contains(korisnickoIme.toLowerCase()) || korisnickoIme.equals(""))
+				&& (m.getRole().toLowerCase().contains(tipKorisnika.toLowerCase()) || tipKorisnika.equals("")))
+				{
+					usersSearched.add(m);
+				}
+		}
+		ArrayList<User> sorted = new ArrayList<User>();
+		
+		while(usersSearched.size() != 0) {
+		
+			String pik = "";
+			User remove = null;
+			for(User u : usersSearched) {
+				if(sortBy.equals("imenu")) {
+						if(pik.compareTo(u.getName()) < 0) {
+							pik = u.getName();
+							remove = u;
+						}
+				}
+				else if(sortBy.equals("prezimenu")) {
+						if(pik.compareTo(u.getSurname()) < 0) {
+							pik = u.getSurname();
+							remove = u;
+						}
+				}
+				else if(sortBy.equals("korisnickom imenu")) {
+						if(pik.compareTo(u.getUsername()) < 0) {
+							pik = u.getUsername();
+							remove = u;
+						}
+				}
+			}
+			
+			sorted.add(remove);
+			usersSearched.remove(remove);
+			
+		}
+		ArrayList<User> flipped = new ArrayList<User>();
+		if(desc) {
+			for(int i = sorted.size()-1; i >= 0; i--) {
+				flipped.add(sorted.get(i));
+			}
+			return flipped;
+		}
+		
+		return sorted;
 	}
 } 

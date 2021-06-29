@@ -1,6 +1,5 @@
-Vue.component("dodaj-manifestaciju", {
+Vue.component("izmena-manifestacije", {
   data: function () {
-    let imgData = "";
     let map = new ol.Map({
       target: "mapOL",
       layers: [
@@ -14,51 +13,32 @@ Vue.component("dodaj-manifestaciju", {
         zoom: 2,
       }),
     });
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const minDate = new Date(today);
     return {
       cookie: "",
       role: "",
-      manifestacija: {
-        name: "",
-        manifestationType: "",
-        regularPrice: "",
-        eventPoster: "",
-        dateTime: "",
-        location: {
-          address: "",
-          city: "",
-          country: "",
-          longitude: "",
-          latitude: "",
-          cookie: "",
-        },
-      },
-      test: "",
-      file: "",
+      manifestacija: [],
+      komentari: [],
+      manifestacijaNaziv: "",
       tipovi: ["FESTIVAL", "CONCERT"],
-      min: "2021-06-23",
       zoom: 15,
-      center: [20.395587077688546, 45.38230342193068],
-      location: [20.395587077688546, 45.38230342193068],
+      center: "",
+      location: "",
       rotation: 0,
+      cookie: "",
+      role: "",
     };
   },
   mounted() {
-    this.cookie = localStorage.getItem("cookie");
-    this.manifestacija.cookie = localStorage.getItem("cookie");
     this.role = localStorage.getItem("role");
-    console.log(this.min);
+    this.cookie = localStorage.getItem("cookie");
+    this.manifestacijaNaziv = localStorage.getItem("manifestacija");
+    this.loadManifestacija();
   },
   template: `
-    
-    
     <div>
-
         <worker-nav></worker-nav>
-                  <link rel="stylesheet" href="css/page_style.css" type="text/css">
-	      <b-card id="page_content">
+        <link rel="stylesheet" href="css/page_style.css" type="text/css">
+<b-card id="page_content">
           <b-form @submit="onSubmit">
        <b-form-group id="input-group-1" label="Naziv manifestacije:" label-for="input-1">
         <b-form-input
@@ -145,7 +125,7 @@ Vue.component("dodaj-manifestaciju", {
         ></b-form-input>
         </b-col>
         </b-row>
-        <br>
+                <br>
         <b-row>
         <vl-map data-projection="EPSG:4326" @click="changeLocation($event.coordinate)" style="height: 500px; width: 500px">
 				<vl-view :zoom.sync="zoom" :center.sync="center" :rotation.sync="rotation"></vl-view>
@@ -165,97 +145,50 @@ Vue.component("dodaj-manifestaciju", {
 					</vl-feature>
 				</vl-map>
         </b-row>
-        <b-form-group id="input-group-1" label="Slika manifestacije:" label-for="input-1">
-            <input type='file' id='imgfile'/>
-        </b-form-group>
-
           <b-button type="submit">Sacuvaj manifestaciju</b-button>
         </b-form>
-            <b-button type="primary" v-on:click="loadImage">Load</b-button>
-            <b-button type="primary" v-on:click="submitFile">Submit</b-button>
-            <canvas id="canvas"></canvas>
 </form>
   </b-card>
-      </div>
-      `,
 
+    </div>`,
   methods: {
-    loadImage() {
-      var input, file, fr, img;
-
-      if (typeof window.FileReader !== "function") {
-        write("The file API isn't supported on this browser yet.");
-        return;
-      }
-
-      input = document.getElementById("imgfile");
-      if (!input) {
-        write("Um, couldn't find the imgfile element.");
-      } else if (!input.files) {
-        write(
-          "This browser doesn't seem to support the `files` property of file inputs."
-        );
-      } else if (!input.files[0]) {
-        write("Please select a file before clicking 'Load'");
-      } else {
-        file = input.files[0];
-        fr = new FileReader();
-        fr.onload = createImage;
-        fr.readAsDataURL(file);
-      }
-
-      function createImage() {
-        img = new Image();
-        img.onload = imageLoaded;
-        img.src = fr.result;
-      }
-
-      function imageLoaded() {
-        var canvas = document.getElementById("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        this.imgData = canvas.toDataURL("image/png");
-      }
-
-      function write(msg) {
-        var p = document.createElement("p");
-        p.innerHTML = msg;
-        document.body.appendChild(p);
-      }
+    changeLocation(evt) {
+      this.location = evt;
     },
     onSubmit() {
-      alert(this.file);
       this.manifestacija.dateTime =
         this.manifestacija.date + "T" + this.manifestacija.time;
 
       this.manifestacija.location.latitude = this.location[0];
       this.manifestacija.location.longitude = this.location[1];
-      //this.manifestacija.eventPoster = "";
-      this.manifestacija.eventPoster = this.file;
-
+      console.log(this.manifestacija);
       axios
-        .post(`rest/manifestation/saveManifestation`, this.manifestacija)
+        .post(`rest/manifestation/updateManifestation`, this.manifestacija)
         .then((response) => alert("Uspesno dodata manifestacija"))
         .catch((error) => {
           console.log("Greska.");
           alert("Vec postoji manifestaciju u ovo vreme na ovom mestu");
         });
     },
-    changeLocation(evt) {
-      this.location = evt;
-    },
-    submitFile() {
-      var canvas = document.getElementById("canvas");
+    loadManifestacija() {
       axios
-        .post(
-          `rest/manifestation/upload`,
-          JSON.stringify(canvas.toDataURL("image/png"))
-        )
+        .get(`rest/manifestation/${this.manifestacijaNaziv}`)
         .then((response) => {
-          alert("asdsada" + response.data);
-          this.file = response.data;
+          console.log(response);
+          this.manifestacija = response.data;
+          this.location = [
+            this.manifestacija.location.latitude,
+            this.manifestacija.location.longitude,
+          ];
+          console.log(this.manifestacija.dateTime);
+          this.manifestacija.date = this.manifestacija.dateTime.split("T")[0];
+          this.manifestacija.time =
+            this.manifestacija.dateTime.split("T")[1].split(":")[0] +
+            ":" +
+            this.manifestacija.dateTime.split("T")[1].split(":")[1];
+          console.log(this.manifestacija.time);
+          this.center = this.location;
+          console.log(this.location);
         });
     },
   },

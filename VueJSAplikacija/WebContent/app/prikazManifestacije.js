@@ -30,6 +30,7 @@ Vue.component("prikaz-manifestacije", {
     this.role = localStorage.getItem("role");
     this.manifestacijaNaziv = localStorage.getItem("manifestacija");
     this.loadManifestacija();
+    this.loadKomentare();
   },
   template: `
   <div>
@@ -100,8 +101,21 @@ Vue.component("prikaz-manifestacije", {
             <h2>
             Komentari
             </h2>
-        </b-row>
+            <br>
+                    <b-row>
+          <div  v-for="komentar in komentari">
         
+            <b-media right-align vertical-align="center">
+              <template #aside>
+                <b-form-rating v-model="komentar.grade"></b-form-rating>
+              </template>
+              <h5 class="mt-0 mb-1">{{komentar.user}}</h5>
+              <p class="mb-0">
+                {{komentar.text}}
+              </p>
+            </b-media>
+            <hr>
+          </div>
 
         </b-card>
     
@@ -128,10 +142,10 @@ Vue.component("prikaz-manifestacije", {
     },
     loadKomentare() {
       axios
-        .get(`rest/manifestation/${this.manifestacijaNaziv}`)
+        .get(`rest/comment/manifestation=${this.manifestacijaNaziv}`)
         .then((response) => {
           console.log(response);
-          this.manifestacija = response.data;
+          this.komentari = response.data;
         });
     },
     fixDate(manifestacija) {

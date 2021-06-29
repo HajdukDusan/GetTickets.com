@@ -8,15 +8,36 @@ Vue.component("home", {
       krajDatum: "2021-06-03",
       minCena: 0,
       maxCena: 0,
+      cookie: "",
+      role: null,
     };
   },
   mounted() {
+    this.role = localStorage.getItem("role");
+    if (this.role == null) {
+      this.role = "default";
+    }
+    this.cookie = localStorage.getItem("cookie");
+    if (this.cookie == null) {
+      this.cookie = "";
+    }
     this.getManifestations();
   },
   template: `
     <div>
-        <default-nav></default-nav>
-      <link rel="stylesheet" href="css/page_style.css" type="text/css">
+          <div v-if="role  === 'default'">
+          <default-nav></default-nav>
+        </div>
+          <div v-if="role  === 'admin'">
+          <admin-nav></admin-nav>
+        </div>
+        <div v-if="role  === 'worker'">
+          <worker-nav></worker-nav>
+        </div>
+        <div v-if="role  === 'user'">
+          <korisnik-nav></korisnik-nav>
+        </div>
+        <link rel="stylesheet" href="css/home.css" type="text/css">
 	      <b-card id="page_content" style= "height: 100vh;
   overflow: hidden;
   overflow-y: scroll; 
@@ -124,7 +145,9 @@ Vue.component("home", {
                         Prosecna ocena: {{ manifestacija.regularPrice  }} <br>
                       </div>
              		    </b-card-text>
-                     <b-button v-on:click="loadManifestacija(manifestacija)" variant="primary">Pogledajte manifestaciju</b-button>
+
+                      <b-button v-on:click="loadManifestacija(manifestacija)" variant="primary">Pogledajte manifestaciju</b-button>
+                     
                      </b-card>
                      
                     </b-col>
@@ -135,6 +158,10 @@ Vue.component("home", {
     `,
 
   methods: {
+    izmeniManifestaciju(manifestacija) {
+      localStorage.setItem("manifestacija", manifestacija.name);
+      this.$router.push("/izmena-manifestacije");
+    },
     loadManifestacija(manifestacija) {
       localStorage.setItem("manifestacija", manifestacija.name);
       this.$router.push("/prikaz-manifestacije");

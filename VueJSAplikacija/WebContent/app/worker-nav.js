@@ -8,9 +8,9 @@ Vue.component("worker-nav", {
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
-            <b-nav-item href="#/home-worker">Home</b-nav-item>
+            <b-nav-item href="#/">Home</b-nav-item>
             <b-nav-item href="#/dodaj-manifestaciju">Kreiraj manifestaciju</b-nav-item>
-            <b-nav-item href="#/home-korisnik">Vase Manifestacije</b-nav-item>
+            <b-nav-item href="#/prikaz-manifestacija-worker">Vase Manifestacije</b-nav-item>
           </b-navbar-nav>
 
           <!-- Right aligned nav items -->
@@ -27,7 +27,7 @@ Vue.component("worker-nav", {
   methods: {
     logout() {
       localStorage.clear();
-      this.$router.push("/");
+      this.$router.push("/login");
     },
   },
 });

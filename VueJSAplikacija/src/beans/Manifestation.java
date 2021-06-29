@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
 import java.util.Base64;  
 
 
@@ -27,7 +28,9 @@ public class Manifestation {
 	private String eventPoster;
 	private boolean isDeleted;
 	private String cookie;
-
+	private ArrayList<String> comments;
+	
+	
 	public Manifestation(String name, ManifestationType manifestationType, String numberOfSeats, Date dateTime,
 			Integer regularPrice, boolean status, Location location, boolean isDeleted, String eventPoster) {
 		super();

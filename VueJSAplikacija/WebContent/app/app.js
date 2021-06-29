@@ -8,11 +8,20 @@ const EditProfil = { template: "<edit-profil></edit-profil>" };
 const PregledKorisnika = {
   template: "<pregled-korisnika></pregled-korisnika>",
 };
+const PrikazKarti = {
+  template: "<korisnik-karte></korisnik-karte>",
+};
 const PrikazManifestacije = {
   template: "<prikaz-manifestacije></prikaz-manifestacije>",
 };
+const PrikazManifestacijaWorker = {
+  template: "<prikaz-manifestacija-worker></prikaz-manifestacija-worker>",
+};
 const DodajManifestaciju = {
   template: "<dodaj-manifestaciju></dodaj-manifestaciju>",
+};
+const izmenaManifestacije = {
+  template: "<izmena-manifestacije></izmena-manifestacije>",
 };
 const DefaultNav = { template: "<default-nav></default-nav>" };
 const AdminNav = { template: "<admin-nav></admin-nav>" };
@@ -35,6 +44,12 @@ const router = new VueRouter({
     { path: "/home-worker", component: HomeWorker },
     { path: "/pregled-korisnika", component: PregledKorisnika },
     { path: "/dodaj-manifestaciju", component: DodajManifestaciju },
+    {
+      path: "/prikaz-manifestacija-worker",
+      component: PrikazManifestacijaWorker,
+    },
+    { path: "/izmena-manifestacije", component: izmenaManifestacije },
+    { path: "/korisnik-karte", component: PrikazKarti },
   ],
 });
 

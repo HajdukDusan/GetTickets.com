@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import beans.Location;
@@ -102,6 +103,23 @@ public class ManifestationDAO {
 		//writeManifestation("D:\\faks\\3godina\\Web\\VueJSAplikacija\\WebContent\\data\\manifestations.txt");
 		return true;
 	}
+	public boolean updateManifestation(Manifestation manifestation) {
+		
+		if(manifestation.getEventPoster() == null) {
+			manifestation.setEventPoster("");
+		}
+		for(Manifestation m: manifestationsList) {
+			if(m.getName().equals(manifestation.getName())){
+				manifestationsList.remove(m);
+				manifestationsList.add(manifestation);
+				manifestations.put(manifestation.getName(), manifestation);
+			}
+		}
+
+
+		//writeManifestation("D:\\faks\\3godina\\Web\\VueJSAplikacija\\WebContent\\data\\manifestations.txt");
+		return true;
+	}
 	public HashMap<String, Manifestation> getManifestations() {
 		return manifestations;
 	}
@@ -129,6 +147,18 @@ public class ManifestationDAO {
 				}
 		}
 		return manifestationsSearched;
+	}
+	public ArrayList<Manifestation> getManifestationsWorker(List<String> ids){
+		ArrayList<Manifestation> manifs = new ArrayList<Manifestation>();
+		for(String id:ids) {
+			for(Manifestation m: manifestationsList) {
+				if(m.getName().equals(id)) {
+					manifs.add(m);
+				}
+			}
+
+		}
+		return manifs;
 	}
 	public void setManifestationsList(ArrayList<Manifestation> manifestationsList) {
 		this.manifestationsList = manifestationsList;
