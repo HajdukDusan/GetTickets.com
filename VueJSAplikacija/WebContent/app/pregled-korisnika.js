@@ -7,7 +7,13 @@ Vue.component("pregled-korisnika", {
       ime: "",
       prezime: "",
       korisnicko: "",
+      tipKorisnika: "",
       tipoviKorisnika: ["", "user", "worker", "admin"],
+      sortByList: ["imenu", "prezimenu", "korisnickom imenu"],
+      sortBy: "imenu",
+      
+      desc: "opadajuce",
+      descList: ["opadajuce", "rastuce"],
     };
   },
   mounted() {
@@ -32,6 +38,7 @@ Vue.component("pregled-korisnika", {
                     </template>
                     <b-form-input
                       placeholder="Pretrazi po imenu..."
+                      v-on:input="getKorisniciSearched"
                       v-model="ime"
                       type="search"/>
                 </b-input-group>
@@ -43,6 +50,7 @@ Vue.component("pregled-korisnika", {
                     </template>
                     <b-form-input
                       placeholder="Pretrazi po prezimenu..."
+                      v-on:input="getKorisniciSearched"
                       v-model="prezime"
                       type="search"/>
                 </b-input-group>
@@ -54,6 +62,7 @@ Vue.component("pregled-korisnika", {
                     </template>
                     <b-form-input
                       placeholder="Pretrazi po korisnicko imenu..."
+                      v-on:input="getKorisniciSearched"
                       v-model="korisnicko"
                       type="search"/>
                 </b-input-group>
@@ -65,11 +74,42 @@ Vue.component("pregled-korisnika", {
                     </template>
                     <b-form-select
                     id="input-3"
-                    v-model="korisnicko"
+                    v-on:input="getKorisniciSearched"
+                    v-model="tipKorisnika"
                     :options="tipoviKorisnika"
                     ></b-form-select>
                 </b-input-group>
                 </b-col>
+                
+                
+                <b-col>
+                <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Sortiraj po</b-input-group-text>
+                    </template>
+                    <b-form-select
+                    id="input-4"
+                    v-on:input="getKorisniciSearched"
+                    v-model="sortBy"
+                    :options="sortByList"
+                    ></b-form-select>
+                </b-input-group>
+                </b-col>
+                
+                <b-col>
+                <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Redosled</b-input-group-text>
+                    </template>
+                    <b-form-select
+                    id="input-5"
+                    v-on:input="getKorisniciSearched"
+                    v-model="desc"
+                    :options="descList"
+                    ></b-form-select>
+                </b-input-group>
+                </b-col>
+                
         </b-row>
                       <b-row >
                   <div class ="col-md-4" v-for="korisnik in korisnici">
@@ -101,6 +141,50 @@ Vue.component("pregled-korisnika", {
         console.log(response.data);
         this.korisnici = response.data;
       });
+    },
+    getKorisniciSearched() {
+      if (this.ime === "") {
+        this.ime = '""';
+      }
+      if (this.prezime === "") {
+        this.prezime = '""';
+      }
+      if (this.korisnicko === "") {
+        this.korisnicko = '""';
+      }
+      if (this.tipKorisnika === "") {
+        this.tipKorisnika = '""';
+      }
+
+	  let d = false;
+
+      if (this.desc === "opadajuce") {
+        d = true;
+      }
+      else {
+       d = false;
+      }
+
+      axios
+        .get(
+          `rest/user/usersSeached/ime=${this.ime}/prezime=${this.prezime}/korisnickoIme=${this.korisnicko}/tipKorisnika=${this.tipKorisnika}/desc=${d}/sortBy=${this.sortBy}`
+        )
+        .then((response) => {
+          this.korisnici = response.data;
+        });
+      
+      if (this.ime === '""') {
+        this.ime = "";
+      }
+      if (this.prezime === '""') {
+        this.prezime = "";
+      }
+      if (this.korisnicko === '""') {
+        this.korisnicko = "";
+      }
+      if (this.tipKorisnika === '""') {
+        this.tipKorisnika = "";
+      }
     },
   },
 });

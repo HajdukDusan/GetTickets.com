@@ -51,6 +51,7 @@ Vue.component("login", {
           } else if (this.role === "worker") {
             this.$router.push("/home-worker");
           }
+          onSubmit();
         })
         .catch((error) => {
           console.log("Greska.");

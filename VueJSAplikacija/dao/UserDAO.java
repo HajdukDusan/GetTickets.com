@@ -1,12 +1,10 @@
 package dao;
 
 import java.io.BufferedReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
+
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -165,5 +163,58 @@ public class UserDAO {
 
 	public void setUsersList(ArrayList<User> usersList) {
 		this.usersList = usersList;
+	}
+	
+	public ArrayList<User> getUsersSearched(String ime,String prezime, String korisnickoIme,String tipKorisnika, boolean desc, String sortBy) {
+		ArrayList<User> usersSearched = new ArrayList<User>();
+		for(User m:usersList) {
+			if((m.getName().toLowerCase().contains(ime.toLowerCase()) || ime.equals(""))
+				&& (m.getSurname().toLowerCase().contains(prezime.toLowerCase()) || prezime.equals(""))
+				&& (m.getUsername().toLowerCase().contains(korisnickoIme.toLowerCase()) || korisnickoIme.equals(""))
+				&& (m.getRole().toLowerCase().contains(tipKorisnika.toLowerCase()) || tipKorisnika.equals("")))
+				{
+					usersSearched.add(m);
+				}
+		}
+		ArrayList<User> sorted = new ArrayList<User>();
+		
+		while(usersSearched.size() != 0) {
+		
+			String pik = "";
+			User remove = null;
+			for(User u : usersSearched) {
+				if(sortBy.equals("imenu")) {
+						if(pik.compareTo(u.getName()) < 0) {
+							pik = u.getName();
+							remove = u;
+						}
+				}
+				else if(sortBy.equals("prezimenu")) {
+						if(pik.compareTo(u.getSurname()) < 0) {
+							pik = u.getSurname();
+							remove = u;
+						}
+				}
+				else if(sortBy.equals("korisnickom imenu")) {
+						if(pik.compareTo(u.getUsername()) < 0) {
+							pik = u.getUsername();
+							remove = u;
+						}
+				}
+			}
+			
+			sorted.add(remove);
+			usersSearched.remove(remove);
+			
+		}
+		ArrayList<User> flipped = new ArrayList<User>();
+		if(desc) {
+			for(int i = sorted.size()-1; i >= 0; i--) {
+				flipped.add(sorted.get(i));
+			}
+			return flipped;
+		}
+		
+		return sorted;
 	}
 } 
