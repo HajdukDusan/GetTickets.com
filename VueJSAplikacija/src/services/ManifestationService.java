@@ -32,6 +32,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import beans.Manifestation;
 import beans.User;
+import beans.Manifestation.ManifestationStatus;
 import dao.ManifestationDAO;
 import dao.UserDAO;
 @Path("/manifestation")
@@ -62,7 +63,7 @@ public class ManifestationService {
 	{
         String actualPath = ctx.getRealPath("/");
         System.out.println(actualPath);
-        return "Hello Wosdadadrld";
+        return "Hello test";
     }
 	@GET
 	@Path("/manifestationsSeached/naziv={naziv}/grad={grad}/min={min}/max={max}/minDatum={minDatum}/maxDatum={maxDatum}")
@@ -110,7 +111,7 @@ public class ManifestationService {
         for(int i = 0;i<10;i++) {
         	fileName = fileName + rn.nextInt(9) + 9;
         }
-        String path = "C:\\Users\\Win10\\git\\TicketMaster\\VueJSAplikacija\\WebContent\\images\\" +fileName + "." + extension;
+        String path = "C:\\Users\\Hajduk\\Documents\\TicketMaster\\VueJSAplikacija\\WebContent\\images\\" +fileName + "." + extension;
         //String path =  ctx.getRealPath("/") + "images\\" +fileName + "." + extension;
         File file = new File(path);
         try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
@@ -139,6 +140,34 @@ public class ManifestationService {
 	public Collection<Manifestation> getManifestations(){
 		ManifestationDAO dao = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
 		return dao.getManifestationsList();
+	}
+	@GET
+	@Path("/pending-manifestations")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Manifestation> getPendingManifestations(){
+		System.out.println("DOSOOOO");
+		ManifestationDAO dao = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
+		return dao.getPendingManifestationsList();
+	}
+	@GET
+	@Path("/approve/name={name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response ApproveManifestations(@PathParam("name") String name){
+		ManifestationDAO dao = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
+		Manifestation m = dao.getManifestationByName(name);
+		m.setStatus(ManifestationStatus.APPROVED);
+		dao.updateManifestation(m);
+		return Response.ok("",MediaType.APPLICATION_JSON).build();
+	}
+	@GET
+	@Path("/deny/name={name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response DenyManifestations(@PathParam("name") String name){
+		ManifestationDAO dao = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
+		Manifestation m = dao.getManifestationByName(name);
+		m.setStatus(ManifestationStatus.DENIED);
+		dao.updateManifestation(m);
+		return Response.ok("",MediaType.APPLICATION_JSON).build();
 	}
 	@GET
 	@Path("/{id}")

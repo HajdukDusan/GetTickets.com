@@ -16,13 +16,18 @@ public class Manifestation {
 	public enum ManifestationType{
 		CONCERT,FESTIVAL
 	}
+	
+	public enum ManifestationStatus{
+		PENDING, DENIED, APPROVED
+	}
+	
 	private String name;
 	private ManifestationType manifestationType;
 	private String numberOfSeats;
 	@JsonFormat(pattern = "YYYY-MM-DD")
 	private Date dateTime;
 	private Integer regularPrice;
-	private boolean status;
+	private ManifestationStatus status;
 	private Location location;
 	// treba promenuti
 	private String eventPoster;
@@ -32,7 +37,7 @@ public class Manifestation {
 	
 	
 	public Manifestation(String name, ManifestationType manifestationType, String numberOfSeats, Date dateTime,
-			Integer regularPrice, boolean status, Location location, boolean isDeleted, String eventPoster) {
+			Integer regularPrice, ManifestationStatus status, Location location, boolean isDeleted, String eventPoster) {
 		super();
 		this.name = name;
 		this.manifestationType = manifestationType;
@@ -107,11 +112,11 @@ public class Manifestation {
 		this.regularPrice = regularPrice;
 	}
 
-	public boolean isStatus() {
+	public ManifestationStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(boolean status) {
+	public void setStatus(ManifestationStatus status) {
 		this.status = status;
 	}
 

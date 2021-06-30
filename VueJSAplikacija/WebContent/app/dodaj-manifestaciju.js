@@ -26,6 +26,7 @@ Vue.component("dodaj-manifestaciju", {
         regularPrice: "",
         eventPoster: "",
         dateTime: "",
+        status: "",
         location: {
           address: "",
           city: "",
@@ -234,7 +235,7 @@ Vue.component("dodaj-manifestaciju", {
       this.manifestacija.location.longitude = this.location[1];
       //this.manifestacija.eventPoster = "";
       this.manifestacija.eventPoster = this.file;
-
+	  this.manifestacija.status = "PENDING";
       axios
         .post(`rest/manifestation/saveManifestation`, this.manifestacija)
         .then((response) => alert("Uspesno dodata manifestacija"))

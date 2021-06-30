@@ -16,6 +16,7 @@ import java.util.Map;
 
 import beans.Location;
 import beans.Manifestation;
+import beans.Manifestation.ManifestationStatus;
 import beans.Manifestation.ManifestationType;
 public class ManifestationDAO {
 
@@ -31,13 +32,15 @@ public class ManifestationDAO {
 		BufferedReader in = null;
 		try {
 			File file = new File(path);
+			System.out.println("KITA");
+			System.out.println(path);
 			in = new BufferedReader(new FileReader(file));
 			String line;
 			String[] params;
 			line = in.readLine();
 			while ((line = in.readLine()) != null) {
 				params = line.split(",");
-				boolean status = Boolean.parseBoolean(params[5]);
+				ManifestationStatus status = ManifestationStatus.valueOf(params[5]);
 				Date date = new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(params[3]);
 				Location l = new Location(params[6], params[7], params[8], params[9], params[10]);
 				Manifestation.ManifestationType manifestationType =ManifestationType.valueOf(params[1]);
@@ -120,6 +123,16 @@ public class ManifestationDAO {
 		//writeManifestation("D:\\faks\\3godina\\Web\\VueJSAplikacija\\WebContent\\data\\manifestations.txt");
 		return true;
 	}
+	
+	public Manifestation getManifestationByName(String name) {
+		for(Manifestation m: manifestationsList) {
+			if(m.getName().equals(name)){
+				return m;
+			}
+		}
+		return null;
+	}
+	
 	public HashMap<String, Manifestation> getManifestations() {
 		return manifestations;
 	}
@@ -137,6 +150,19 @@ public class ManifestationDAO {
 		});
 		Collections.reverse(manifestationsList);
 		return manifestationsList;
+	}
+	public ArrayList<Manifestation> getPendingManifestationsList() {
+		
+		ArrayList<Manifestation> tmp = new ArrayList<Manifestation>();
+		
+		for(Manifestation m : manifestationsList) {
+			System.out.println(m.getStatus());
+			if(m.getStatus() == ManifestationStatus.PENDING) {
+				tmp.add(m);
+			}
+		}
+		
+		return tmp;
 	}
 	public ArrayList<Manifestation> getManifestationsSearched(String naziv,String grad,Integer min,Integer max) {
 		ArrayList<Manifestation> manifestationsSearched = new ArrayList<Manifestation>();

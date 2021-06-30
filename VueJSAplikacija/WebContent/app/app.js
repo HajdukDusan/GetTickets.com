@@ -8,6 +8,9 @@ const EditProfil = { template: "<edit-profil></edit-profil>" };
 const PregledKorisnika = {
   template: "<pregled-korisnika></pregled-korisnika>",
 };
+const PotvrdaManifestacija = {
+  template: "<potvrda-manifestacija></potvrda-manifestacija>",
+};
 const PrikazKarti = {
   template: "<korisnik-karte></korisnik-karte>",
 };
@@ -43,6 +46,7 @@ const router = new VueRouter({
     { path: "/home-admin", component: HomeAdmin },
     { path: "/home-worker", component: HomeWorker },
     { path: "/pregled-korisnika", component: PregledKorisnika },
+    { path: "/potvrda-manifestacija", component: PotvrdaManifestacija },
     { path: "/dodaj-manifestaciju", component: DodajManifestaciju },
     {
       path: "/prikaz-manifestacija-worker",
