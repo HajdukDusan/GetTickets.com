@@ -85,18 +85,6 @@ public class UserService {
 		dao.save(userToRegister);
 		return Response.ok(MediaType.APPLICATION_JSON).build();
 	}
-	@POST
-	@Path("/registerWorker")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response registerWorker(User userToRegister){
-		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
-		if(dao.findUser(userToRegister.getUsername()) != null) {
-			return Response.status(Response.Status.NOT_FOUND).entity("Username already used!").build();
-		}
-		dao.save(userToRegister);
-		return Response.ok(MediaType.APPLICATION_JSON).build();
-	}
 	@PUT
 	@Path("/updateUser")
 	@Produces(MediaType.APPLICATION_JSON)
