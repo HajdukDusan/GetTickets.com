@@ -11,6 +11,7 @@ Vue.component("admin-nav", {
             <b-nav-item href="#/home-admin">Home</b-nav-item>
             <b-nav-item href="#/pregled-korisnika">Korisnici</b-nav-item>
             <b-nav-item href="#/potvrda-manifestacija">Potvrda Manifestacija</b-nav-item>
+            <b-nav-item href="#/registracija-prodavca">Registruj Prodavca</b-nav-item>
           </b-navbar-nav>
 
           <!-- Right aligned nav items -->
