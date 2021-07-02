@@ -44,13 +44,7 @@ Vue.component("login", {
           localStorage.setItem("cookie", response.data.split(".")[0]);
           this.role = response.data.split(".")[1];
           localStorage.setItem("role", this.role);
-          if (this.role === "user") {
-            this.$router.push("/");
-          } else if (this.role === "admin") {
-            this.$router.push("/");
-          } else if (this.role === "worker") {
-            this.$router.push("/");
-          }
+          this.$router.push("/");
           onSubmit();
         })
         .catch((error) => {

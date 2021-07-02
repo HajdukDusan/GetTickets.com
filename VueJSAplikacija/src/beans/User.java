@@ -21,13 +21,15 @@ public class User {
 	private Date birthDate;
 
 	private UserType userType;
-	private String collectedPoints;
+	private Double collectedPoints;
 	private String role;
 	private ArrayList<Card> pCards;
 	private ArrayList<String> pCardsIds;
 	private ArrayList<Manifestation> manifestations;
 	private ArrayList<String> manifestationsIds;
 	private ArrayList<String> comments;
+	private boolean isDeleted;
+	private boolean blocked;
 	
 	public User() {
 	}
@@ -35,7 +37,7 @@ public class User {
 		return username;
 	}
 	// Konstruktor za obicno korisnika
-	public User(String role,String username,String password,String name,String surname,String gender,Date birthDate,String collectedPoints,UserType userType,ArrayList<Card> pCards) {
+	public User(String role,String username,String password,String name,String surname,String gender,Date birthDate,Double collectedPoints,UserType userType,ArrayList<Card> pCards,boolean isDeleted,boolean blocked) {
 		this.role = role;
 		this.username = username;
 		this.password = password;
@@ -49,7 +51,8 @@ public class User {
 		this.pCardsIds = new ArrayList<String>();
 		this.userType = userType;
 		this.manifestations = null;
-		
+		this.blocked = blocked;
+		this.isDeleted = isDeleted;
 	}
 
 	// Konstruktor za prodavca
@@ -84,7 +87,18 @@ public class User {
 		this.manifestations = null;
 		this.userType = null;
 	}
-	
+	public boolean isBlocked() {
+		return blocked;
+	}
+	public void setBlocked(boolean blocked) {
+		this.blocked = blocked;
+	}
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 	public ArrayList<String> getpCardsIds() {
 		return pCardsIds;
 	}
@@ -124,10 +138,10 @@ public class User {
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
-	public String getCollectedPoints() {
+	public Double getCollectedPoints() {
 		return collectedPoints;
 	}
-	public void setCollectedPoints(String collectedPoints) {
+	public void setCollectedPoints(Double collectedPoints) {
 		this.collectedPoints = collectedPoints;
 	}
 	public String getRole() {
@@ -153,6 +167,12 @@ public class User {
 	}
 	public void setManifestationsIds(ArrayList<String> manifestationsIds) {
 		this.manifestationsIds = manifestationsIds;
+	}
+	public UserType getUserType() {
+		return userType;
+	}
+	public void setUserType(UserType userType) {
+		this.userType = userType;
 	}
 	@Override
 	public String toString() {

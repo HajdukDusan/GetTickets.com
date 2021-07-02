@@ -77,16 +77,14 @@ Vue.component("potvrda-manifestacija", {
     OdobriManifestacija(manifestacija) {
       axios.get(`rest/manifestation/approve/name=${manifestacija.name}`).then((response) => {
         console.log(response.data);
-        //this.getManifestations();
+       	this.getManifestations();
       });
-      location.reload();
     },
     OdbiManifestacija(manifestacija) {
       axios.get(`rest/manifestation/deny/name=${manifestacija.name}`).then((response) => {
         console.log(response.data);
-        //this.getManifestations();
+        this.getManifestations();
       });
-      location.reload();
     },
   },
 });

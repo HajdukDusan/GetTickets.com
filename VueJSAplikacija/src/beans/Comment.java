@@ -1,12 +1,24 @@
 package beans;
 
 public class Comment {
+	
+	public enum CommentStatus {
+		APPROVED,DENIED,PENDING
+	};
+	private CommentStatus status;
 	private String user;
 	private String manifestation;
 	private String text;
 	private String grade;
 	public Comment() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public CommentStatus getStatus() {
+		return status;
+	}
+	public void setStatus(CommentStatus status) {
+		this.status = status;
 	}
 	public String getUser() {
 		return user;
@@ -38,6 +50,15 @@ public class Comment {
 		this.manifestation = manifestation;
 		this.text = text;
 		this.grade = grade;
+		this.status = CommentStatus.PENDING;
+	}
+	public Comment(String user, String manifestation, String text, String grade,CommentStatus cs) {
+		super();
+		this.user = user;
+		this.manifestation = manifestation;
+		this.text = text;
+		this.grade = grade;
+		this.status = cs;
 	}
 
 }

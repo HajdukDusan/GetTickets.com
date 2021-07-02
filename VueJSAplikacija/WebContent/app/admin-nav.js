@@ -8,7 +8,7 @@ Vue.component("admin-nav", {
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
-            <b-nav-item href="#/home-admin">Home</b-nav-item>
+            <b-nav-item href="#/">Home</b-nav-item>
             <b-nav-item href="#/pregled-korisnika">Korisnici</b-nav-item>
             <b-nav-item href="#/potvrda-manifestacija">Potvrda Manifestacija</b-nav-item>
           </b-navbar-nav>

@@ -37,11 +37,13 @@ public class UserDAO {
 	public Collection<User> findAll() {
 		return users.values();
 	}
-
 	public User findUser(String username) {
 		return users.containsKey(username) ? users.get(username) : null;
 	}
-	
+	public User findUserCookie(String cookie) {
+		String username = cookie.split("-")[0];
+		return users.containsKey(username) ? users.get(username) : null;
+	}
 	public User loginUser(String username,String password) {
 		System.out.println(username + password);
 		if(!users.containsKey(username)) {
@@ -57,13 +59,10 @@ public class UserDAO {
 	}
 	
 	public User save(User user) {
-		for(User u: usersList) {
-			if(u.getUsername().equals(user.getUsername())) {
-				usersList.remove(user);
-			}
-		}
+		
 		users.put(user.getUsername(),user);
-		usersList.add(user);
+		Collection<User> values = users.values();
+		usersList = new ArrayList<>(values);
 		return user;
 		
 	}
@@ -113,12 +112,21 @@ public class UserDAO {
 	private User generateUser(String[] data,HashMap<String, Card> allCards) throws ParseException {
 		Date date = new SimpleDateFormat("dd/MM/yyyy").parse(data[6]);
 		
-		UserType userType = new UserType(data[8]);
 		ArrayList<Card> pCards = new ArrayList<Card>();
 		ArrayList<String> pCardsIds = new ArrayList<String>();
-		if(data.length == 11) {
-			if(!(data[10].equals(""))) {
-				String[] cardIds = data[10].split(";");
+		UserType userType = null;
+		if(data[8].equals("BRONZE")){
+			userType = new UserType(data[8],0.0,"3000");
+		}
+		if(data[8].equals("SILVER")){
+			userType = new UserType(data[8],0.03,"4000");
+		}
+		if(data[8].equals("GOLD")){
+			userType = new UserType(data[8],0.05,"");		
+		}
+		if(data.length == 12) {
+			if(!(data[11].equals(""))) {
+				String[] cardIds = data[11].split(";");
 				for(String s: cardIds) {
 					System.out.println(s);
 					Card c = allCards.get(s);
@@ -129,7 +137,7 @@ public class UserDAO {
 		}
 
 		
-		User user = new User(data[0],data[1],data[2],data[3],data[4],data[5],date,data[7],userType,pCards);
+		User user = new User(data[0],data[1],data[2],data[3],data[4],data[5],date,Double.valueOf(data[7]),userType,pCards,Boolean.valueOf(data[9]),Boolean.valueOf(data[10]));
 		user.setpCardsIds(pCardsIds);
 		return user;
 	}

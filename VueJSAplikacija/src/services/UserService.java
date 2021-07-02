@@ -65,7 +65,19 @@ public class UserService {
 			return Response.status(Response.Status.NOT_FOUND).entity("Bad cookie value").build();
 		}
 		return Response.ok(dao.findUser(cookie.split("-")[0]), MediaType.APPLICATION_JSON).build();
-	  } 
+	  }
+	@GET 
+	@Path("/userType/{cookie}")
+	@Produces(MediaType.APPLICATION_JSON)  
+	  public Response getUserType(@PathParam(value = "cookie") String cookie) {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		String username = cookie.split("-")[0];
+		System.out.println(dao.getUsers());
+		if(dao.findUser(username) == null) {
+			return Response.status(Response.Status.NOT_FOUND).entity("Bad cookie value").build();
+		}
+		return Response.ok(dao.findUser(cookie.split("-")[0]), MediaType.APPLICATION_JSON).build();
+	  }
 	@GET
 	@Path("/users")
 	@Produces(MediaType.APPLICATION_JSON)

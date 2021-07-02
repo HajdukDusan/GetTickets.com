@@ -33,7 +33,12 @@ Vue.component("korisnik-karte", {
                       Manifestacija: {{ karta.manifestation }} <br>
                       Cena: {{karta.price}} <br>
                       Tip: {{karta.cardType}} <br>
+                      Datum: {{karta.manifestationDate}} <br>
                     </b-card-text>
+                    
+                    <div v-if="checkDate(karta)" >
+                      <b-button v-on:click="otkaziKartu(karta)" variant="danger">Otkazi</b-button>
+                    </div>
                      </b-card>
                      
                     </b-col>
@@ -46,6 +51,29 @@ Vue.component("korisnik-karte", {
 
     `,
   methods: {
+      checkDate(card) {
+      var today = new Date();
+      var nextWeek = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate() + 7
+      );
+      const sevenDays = 7 * 60 * 60 * 24 * 1000;
+      console.log(nextWeek - Date.parse(card.manifestationDate.split("T")[0]));
+      if (nextWeek - Date.parse(card.manifestationDate.split("T")[0]) > 0) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    otkaziKartu(card) {
+      console.log(card);
+      axios
+        .get(`rest/card/cancelCard/cookie=${this.cookie}/id=${card.id}`)
+        .then((response) => {
+          this.loadKarte();
+        });
+    },
     loadKarte() {
       axios
         .get(`rest/card/userCards/cookie=${this.cookie}`)

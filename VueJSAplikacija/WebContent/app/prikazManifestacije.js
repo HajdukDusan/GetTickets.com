@@ -63,15 +63,55 @@ Vue.component("prikaz-manifestacije", {
         <b-col>
             Tip: {{ manifestacija.manifestationType }} <br>
             Datum: {{ manifestacija.dateTime }} <br>
-            Cena karte: {{ manifestacija.regularPrice}} <br>
-            Lokacija: {{ manifestacija.location.address}}, {{ manifestacija.location.city}}, {{ manifestacija.location.country  }}<br>
-            <div v-if="manifestacija.status == false">
-                Status: Nije jos odrzana <br>
-            </div>
-            <div v-else>
+              Cena karte: {{ manifestacija.regularPrice}}
+            <b-button pill v-b-popover.hover="'VIP cena:' + vipCena + ' FAN_PIT cena:' + fanPitCena"size="lg" variant="outline-dark">i</b-button> <br>
+            Lokacija: {{ manifestacija.location.address}}, {{ manifestacija.location.city}}, {{ manifestacija.location.country}}<br>
+            Broj sedista: {{manifestacija.numberOfSeats}} <br>
+            Preostalo karti: {{preostalaKarte}} <br>
+            <div v-if="manifestacija.status === 'FINISHED'">
                 Status: Odrzana <br>
-                Prosecna ocena:... <br>
+                Prosecna ocena: <br>
             </div>
+            
+                       <!-- KUPOVINA KARTI-->
+            <div v-if="manifestacija.status === 'APPROVED'">
+              <div v-if="preostalaKarte != 0">
+                <div v-if="role === 'user'">
+                <b-row>
+                  <b-col>
+                  <p>	Tip kupca: {{this.userType}} <b-button pill v-b-popover.hover="'BRONZE - bez popusta            SILVER - 3% popusta GOLD - 5% popust'" size="lg" variant="outline-dark">i</b-button> </p>
+                  </b-col>
+                </b-row>
+           
+              <b-row>
+                  <b-col>
+                  
+                  <b-form-select
+                  v-on:change="updateCenu"
+                v-model="tipKarte"
+                :options="options"
+                required
+              ></b-form-select> 
+                              </b-col>
+                  <b-col>
+                    <b-form-input
+                    v-on:change="updateCenu"
+                    type="number"
+                    min=1
+                    v-model="brojKarti">
+                </b-form-input>
+                  </b-col>
+                  <b-col>
+                  <b-button v-on:click="kupiKarte">Kupite karte</b-button>
+                  </b-col>
+                  <b-row>
+                    <p>Ukupna cena: {{cenaKarti}}</p>
+                  </b-row>
+                
+                  </b-row>
+                </div>
+              </div>
+            
             </b-col>
             <b-col>
             
@@ -98,12 +138,14 @@ Vue.component("prikaz-manifestacije", {
                 <br>
         </b-row>
         <b-row>
+          <div v-if="komentari == []">
             <h2>
             Komentari
             </h2>
+            </div>
             <br>
-                    <b-row>
-          <div  v-for="komentar in komentari">
+          <b-row>
+          <div v-for="komentar in komentari">
         
             <b-media right-align vertical-align="center">
               <template #aside>
@@ -126,6 +168,62 @@ Vue.component("prikaz-manifestacije", {
   </div>
      `,
   methods: {
+      updateCenu() {
+      if (this.tipKarte === "VIP") {
+        this.cenaKarti = this.brojKarti * this.manifestacija.regularPrice * 4;
+        this.cenaKarti = this.cenaKarti - this.cenaKarti * this.popust;
+        console.log(this.cenaKarti);
+      } else if (this.tipKarte == "FAN_PIT") {
+        this.cenaKarti = this.brojKarti * this.manifestacija.regularPrice * 2;
+        this.cenaKarti = this.cenaKarti - this.cenaKarti * this.popust;
+        console.log(this.cenaKarti);
+      } else {
+        this.cenaKarti = this.brojKarti * this.manifestacija.regularPrice;
+        this.cenaKarti = this.cenaKarti - this.cenaKarti * this.popust;
+        console.log(this.cenaKarti);
+      }
+    },
+    loadUserType() {
+      axios.get(`rest/user/userInfo/${this.cookie}`).then((response) => {
+        if (this.userType != "") {
+          if (this.userType != response.data.userType.type) {
+            alert(`Presli ste na ${response.data.userType.type} korisnika!!`);
+          }
+        }
+        this.userType = response.data.userType.type;
+        this.popust = response.data.userType.discount;
+      });
+    },
+      kupiKarte() {
+      if (this.preostalaKarte < this.brojKarti) {
+        alert("Uneli ste veci broj karti od onih na stanju");
+        return;
+      }
+      if (confirm("Da li ste sigurn da zelite da kupite karte")) {
+        axios
+          .get(
+            `rest/card/buyCards/type=${this.tipKarte}/number=${this.brojKarti}/user=${this.cookie}/Manifestation=${this.manifestacijaNaziv}`
+          )
+          .then((response) => {
+            alert(response.data);
+            //this.loadManifestacija();
+            this.loadUserType();
+            this.loadProdateKarte();
+          })
+          .catch((error) => {
+            alert("Nema dovoljno karti na lageru");
+          });
+      }
+    },
+      loadProdateKarte() {
+      axios
+        .get(
+          `rest/card/manifestationReservedCardsCount/${this.manifestacijaNaziv}`
+        )
+        .then((response) => {
+          this.preostalaKarte = response.data;
+        });
+    },
     loadManifestacija() {
       axios
         .get(`rest/manifestation/${this.manifestacijaNaziv}`)
@@ -136,6 +234,8 @@ Vue.component("prikaz-manifestacije", {
             this.manifestacija.location.latitude,
             this.manifestacija.location.longitude,
           ];
+          this.fanPitCena = this.manifestacija.regularPrice * 2;
+          this.vipCena = this.manifestacija.regularPrice * 4;
           this.center = this.location;
           console.log(this.location);
         });

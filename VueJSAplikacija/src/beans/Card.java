@@ -3,7 +3,7 @@ package beans;
 import java.util.Date;
 
 public class Card {
-	enum CardType{
+	public enum CardType{
 		VIP,REGULAR,FAN_PIT
 	}
 	
@@ -14,10 +14,10 @@ public class Card {
 	private String buyersName;
 	private String buyersSurname;
 	private boolean status;
-	private String cardType;
+	private CardType  cardType;
 	
 	public Card(String id, String manifestation, Date manifestationDate, String price, String buyersName,
-			String buyersSurname, boolean status, String cardType) {
+			String buyersSurname, boolean status, CardType cardType) {
 		super();
 		this.id = id;
 		this.manifestation = manifestation;
@@ -70,10 +70,10 @@ public class Card {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	public String getCardType() {
+	public CardType getCardType() {
 		return cardType;
 	}
-	public void setCardType(String cardType) {
+	public void setCardType(CardType cardType) {
 		this.cardType = cardType;
 	}
 	

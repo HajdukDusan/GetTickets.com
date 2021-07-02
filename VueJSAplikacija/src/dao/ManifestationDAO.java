@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -111,13 +112,11 @@ public class ManifestationDAO {
 		if(manifestation.getEventPoster() == null) {
 			manifestation.setEventPoster("");
 		}
-		for(Manifestation m: manifestationsList) {
-			if(m.getName().equals(manifestation.getName())){
-				manifestationsList.remove(m);
-				manifestationsList.add(manifestation);
-				manifestations.put(manifestation.getName(), manifestation);
-			}
-		}
+		 
+		  
+		manifestations.put(manifestation.getName(), manifestation);
+		Collection<Manifestation> values = manifestations.values();
+		manifestationsList = new ArrayList<>(values);
 
 
 		//writeManifestation("D:\\faks\\3godina\\Web\\VueJSAplikacija\\WebContent\\data\\manifestations.txt");

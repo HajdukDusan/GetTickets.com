@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import beans.Card;
+import beans.Card.CardType;
 
 
 public class CardDAO {
@@ -35,7 +36,7 @@ public class CardDAO {
 			while ((line = in.readLine()) != null) {
 				params = line.split(",");
 				Boolean status = Boolean.parseBoolean(params[5]);
-				Card c = new Card(params[0], params[1], mDAO.getManifestations().get(params[1]).getDateTime(), params[2], params[3],params[4],status,params[6]);
+				Card c = new Card(params[0], params[1], mDAO.getManifestations().get(params[1]).getDateTime(), params[2], params[3],params[4],status,CardType.valueOf(params[6]));
 				
 				cards.put(params[0],c);
 				cardsList.add(c);
@@ -62,6 +63,32 @@ public class CardDAO {
 
 		}
 		return userCards;
+		
+	}
+	public Card findCard(String id) {
+		return cards.get(id);
+	}
+	public List<Card> getManifestationCards(String manifestation){
+		ArrayList<Card> cardsManif = new ArrayList<Card>();
+		for(Card c:cardsList) {
+			if(c.getManifestation().equals(manifestation)) {
+				cardsManif.add(c);
+			}
+		}
+		return cardsManif;
+	}
+	public List<Card> getManifestationCardsReserved(String manifestation){
+		ArrayList<Card> cardsManif = new ArrayList<Card>();
+		for(Card c:cardsList) {
+			if(c.getManifestation().equals(manifestation) && c.isStatus()) {
+				cardsManif.add(c);
+			}
+		}
+		return cardsManif;
+	}
+	public void save(Card c) {
+		cards.put(c.getId(),c);
+		cardsList.add(c);
 		
 	}
 	public HashMap<String, Card> getCards() {

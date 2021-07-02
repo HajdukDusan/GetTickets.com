@@ -9,6 +9,7 @@ import java.util.List;
 
 import beans.Card;
 import beans.Comment;
+import beans.Comment.CommentStatus;
 import beans.User;
 
 public class CommentDAO {
@@ -37,7 +38,8 @@ public class CommentDAO {
 			while ((line = in.readLine()) != null) {
 				params = line.split(",");
 				
-				Comment c = new Comment(params[0],params[1],params[2],params[3]);
+				CommentStatus cs = CommentStatus.valueOf(params[4]);
+				Comment c = new Comment(params[0],params[1],params[2],params[3],cs);
 				commentsList.add(c);
 			}
 		} catch (Exception e) {

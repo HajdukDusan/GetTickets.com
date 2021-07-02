@@ -18,7 +18,7 @@ public class Manifestation {
 	}
 	
 	public enum ManifestationStatus{
-		PENDING, DENIED, APPROVED
+		PENDING, DENIED, APPROVED, FINISHED
 	}
 	
 	private String name;
