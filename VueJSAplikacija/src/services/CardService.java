@@ -1,5 +1,7 @@
 package services;
+import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -18,6 +20,7 @@ import beans.Card;
 import beans.Card.CardType;
 import beans.Manifestation;
 import beans.User;
+import beans.UserOtkazivanje;
 import dao.CardDAO;
 import dao.ManifestationDAO;
 import dao.UserDAO;
@@ -77,12 +80,16 @@ public class CardService {
 		CardDAO dao = (CardDAO) ctx.getAttribute("cardDAO");
 		ManifestationDAO mDAO = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
 		//pronadjemo korisnika
-		User u = userDAO.findUserCookie(cookie);
+		User u = userDAO.findUserCookie(cookie);		
 		
 		Double points = u.getCollectedPoints();
 		Card c = dao.findCard(id);
 		c.setStatus(false);
 		dao.save(c);
+		
+		
+		UserOtkazivanje uot = new UserOtkazivanje(u.getUsername(), c.getId(), LocalDate.now());
+		userDAO.saveUserOtkazivanjetoFile(uot);
 		
 	}
 	@GET

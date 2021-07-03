@@ -31,6 +31,8 @@ public class User {
 	private boolean isDeleted;
 	private boolean blocked;
 	
+	private Integer numOfPenals = 0;
+	
 	public User() {
 	}
 	public String getUsername() {
@@ -180,5 +182,11 @@ public class User {
 				+ ", gender=" + gender + ", birthDate=" + birthDate + ", userType=" + userType + ", collectedPoints="
 				+ collectedPoints + ", role=" + role + ", pCards=" + pCardsIds + ", manifestations=" + manifestationsIds
 				+ "]";
+	}
+	public Integer getNumOfPenals() {
+		return numOfPenals;
+	}
+	public void setNumOfPenals(Integer numOfPenals) {
+		this.numOfPenals = numOfPenals;
 	}
 }

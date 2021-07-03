@@ -33,6 +33,7 @@ public class UserService {
 			String path = ctx.getRealPath("/") + "data\\manifestations.txt";
 			String path1 = ctx.getRealPath("/")+ "data\\cards.txt";
 			String path2 = ctx.getRealPath("/")+ "data\\users.txt";
+			String path3 = ctx.getRealPath("/")+ "data\\otkazivanja.txt";
 			if(ctx.getAttribute("manifestationDAO")== null) {
 				ManifestationDAO mDAO = new ManifestationDAO(path);
 				ctx.setAttribute("manifestationDAO", mDAO);
@@ -42,7 +43,7 @@ public class UserService {
 				ctx.setAttribute("cardDAO", cDAO);
 			}
 
-			ctx.setAttribute("userDAO", new UserDAO(path2,(ManifestationDAO) ctx.getAttribute("manifestationDAO"),(CardDAO) ctx.getAttribute("cardDAO")));
+			ctx.setAttribute("userDAO", new UserDAO(path2, path3,(ManifestationDAO) ctx.getAttribute("manifestationDAO"),(CardDAO) ctx.getAttribute("cardDAO")));
 		}
 	}
 	
@@ -160,5 +161,18 @@ public class UserService {
 		}
 
 		return dao.getUsersSearched(ime, prezime, korisnickoIme, tipKorisnika, desc, sortBy);
+	}
+	
+	@GET
+	@Path("/usersWithPenals")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> getUsersWithPenals(){
+		
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		
+		System.out.println("KITA");
+
+		return dao.getUsersWithPenals();
 	}
 }   

@@ -27,6 +27,7 @@ public class CommentService {
 			String path1 = ctx.getRealPath("/")+ "data\\cards.txt";
 			String path2 = ctx.getRealPath("/")+ "data\\users.txt";
 			String path3 = ctx.getRealPath("/")+ "data\\comments.txt";
+			String path4 = ctx.getRealPath("/")+ "data\\otkazivanja.txt";
 			if(ctx.getAttribute("manifestationDAO")== null) {
 				ManifestationDAO mDAO = new ManifestationDAO(path);
 				ctx.setAttribute("manifestationDAO", mDAO);
@@ -36,7 +37,7 @@ public class CommentService {
 				ctx.setAttribute("cardDAO", cDAO);
 			}
 			if(ctx.getAttribute("userDAO") == null) {
-				ctx.setAttribute("userDAO", new UserDAO(path2,(ManifestationDAO) ctx.getAttribute("manifestationDAO"),(CardDAO) ctx.getAttribute("cardDAO")));
+				ctx.setAttribute("userDAO", new UserDAO(path2,path4,(ManifestationDAO) ctx.getAttribute("manifestationDAO"),(CardDAO) ctx.getAttribute("cardDAO")));
 			}
 			ctx.setAttribute("commentDAO", new CommentDAO(path3,(ManifestationDAO) ctx.getAttribute("manifestationDAO"),(CardDAO) ctx.getAttribute("cardDAO"), (UserDAO) ctx.getAttribute("userDAO")));
 		}
