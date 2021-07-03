@@ -4,12 +4,25 @@ Vue.component("korisnik-karte", {
       cookie: "",
       role: "",
       karte: [],
+      manifestacija: "",
+      cenaOd: "",
+      cenaDo: "",
+      datumOd: "",
+      datumDo: "",
+      sortBy: "",
+      tipKarte: "",
+      statusKarte: "",
+      smer: "Rastuce",
+      smerOptions: ["Rastuce", "Opadajuce"],
+      sortByOptions: ["Ime manifestacija", "Cena Karte", "Datum odrzavanja"],
+      filterByTip: ["", "REGULAR", "FAN_PIT", "VIP"],
+      filterByStatus: ["", "true", "false"],
     };
   },
   mounted() {
     this.cookie = localStorage.getItem("cookie");
     this.role = localStorage.getItem("role");
-    this.loadKarte();
+    this.getCardsSearched();
   },
   template: `
     <div>
@@ -21,7 +34,128 @@ Vue.component("korisnik-karte", {
     overflow-y: scroll; 
     text-align: center;">
     
-                              <b-row >
+
+                <b-row>
+            <b-col>
+                <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Manifestacija</b-input-group-text>
+                    </template>
+                  <b-form-input
+                      placeholder="Pretrazi po nazivu..."
+                      v-on:input="getCardsSearched"
+                      v-model="manifestacija"
+                      type="search"/>
+                </b-input-group>
+                </b-col>
+               <b-col>
+                  <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Cena od:</b-input-group-text>
+                    </template>
+                  <b-form-input
+                      placeholder="Cena od.."
+                      v-on:input="getCardsSearched"
+                      v-model="cenaOd"
+                      type="search"/>
+                       </b-input-group>
+                </b-col>
+                                <b-col>
+                                 <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Cena do:</b-input-group-text>
+                    </template>
+                <b-form-input
+                      placeholder="Maksimalnu cenu.."
+                      v-model="cenaDo"
+                      v-on:input="getCardsSearched"
+                      type="number"
+                      min = "0"/>
+                      </b-input-group>
+                </b-col>
+                </b-row>
+                <br>
+              <b-row>
+            <b-col>
+                <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Datum od:</b-input-group-text>
+                    </template>
+                  <b-form-input
+                      v-on:input="getCardsSearched"
+                      v-model="datumOd"
+                      type="date"/>
+                </b-input-group>
+                </b-col>
+               <b-col>
+                  <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Datum do:</b-input-group-text>
+                    </template>
+                  <b-form-input
+                      v-on:input="getCardsSearched"
+                      v-model="datumDo"
+                      type="date"/>
+                       </b-input-group>
+                </b-col>
+                </b-row>
+                <br>
+                <b-row>
+                <b-col>
+                  <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Sort by</b-input-group-text>
+                    </template>
+                <b-form-select
+                      placeholder="Izaberite sort"
+                      v-model="sortBy"
+                      :options="sortByOptions"
+                      v-on:input="getCardsSearched"/>
+                      </b-input-group>
+                </b-col>
+                <b-col>
+                  <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Smer</b-input-group-text>
+                    </template>
+                <b-form-select
+                      v-model="smer"
+                      :options="smerOptions"
+                      v-on:input="getCardsSearched"/>
+                      </b-input-group>
+                </b-col>
+                <b-col>
+                  <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Tip karte</b-input-group-text>
+                    </template>
+                <b-form-select
+                      placeholder="Izaberite sort"
+                      v-model="tipKarte"
+                      :options="filterByTip"
+                      v-on:input="getCardsSearched"/>
+                      </b-input-group>
+                </b-col>
+                <b-col>
+                  <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Status karte</b-input-group-text>
+                    </template>
+                <b-form-select
+                      placeholder="Izaberite sort"
+                      v-model="statusKarte"
+                      :options="filterByStatus"
+                      v-on:input="getCardsSearched"/>
+                      </b-input-group>
+                </b-col>
+                </b-row>
+
+
+
+
+
+
+                  <b-row >
                   <div class ="col-md-4" v-for="karta in karte">
                   <b-col>
                    <b-card
@@ -34,10 +168,14 @@ Vue.component("korisnik-karte", {
                       Cena: {{karta.price}} <br>
                       Tip: {{karta.cardType}} <br>
                       Datum: {{karta.manifestationDate}} <br>
+                      Status: {{karta.status}} <br>
                     </b-card-text>
                     
                     <div v-if="checkDate(karta)" >
-                      <b-button v-on:click="otkaziKartu(karta)" variant="danger">Otkazi</b-button>
+                      <div v-if="karta.status">
+                        <b-button v-on:click="otkaziKartu(karta)" variant="danger">Otkazi</b-button>
+                      </div>
+
                     </div>
                      </b-card>
                      
@@ -51,6 +189,26 @@ Vue.component("korisnik-karte", {
 
     `,
   methods: {
+    getCardsSearched() {
+      axios
+        .get(`rest/card/searched`, {
+          params: {
+            cookie: this.cookie,
+            manifestacija: this.manifestacija,
+            cenaOd: this.cenaOd,
+            cenaDo: this.cenaDo,
+            datumOd: this.datumOd,
+            datumDo: this.datumDo,
+            sortBy: this.sortBy,
+            tipKarte: this.tipKarte,
+            statusKarte: this.statusKarte,
+            smer: this.smer,
+          },
+        })
+        .then((resp) => {
+          this.karte = resp.data;
+        });
+    },
     checkDate(card) {
       var today = new Date();
       var nextWeek = new Date(
@@ -71,7 +229,7 @@ Vue.component("korisnik-karte", {
       axios
         .get(`rest/card/cancelCard/cookie=${this.cookie}/id=${card.id}`)
         .then((response) => {
-          this.loadKarte();
+          this.getCardsSearched();
         });
     },
     loadKarte() {

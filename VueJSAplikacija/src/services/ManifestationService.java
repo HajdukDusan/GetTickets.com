@@ -113,8 +113,8 @@ public class ManifestationService {
         for(int i = 0;i<10;i++) {
         	fileName = fileName + rn.nextInt(9) + 9;
         }
-        String path = "C:\\Users\\Hajduk\\Documents\\TicketMaster\\VueJSAplikacija\\WebContent\\images\\" +fileName + "." + extension;
-        //String path =  ctx.getRealPath("/") + "images\\" +fileName + "." + extension;
+        //String path = "C:\\Users\\Hajduk\\Documents\\TicketMaster\\VueJSAplikacija\\WebContent\\images\\" +fileName + "." + extension;
+        String path =  ctx.getRealPath("/") + "images\\" +fileName + "." + extension;
         File file = new File(path);
         try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             outputStream.write(data);
@@ -147,7 +147,6 @@ public class ManifestationService {
 	@Path("/pending-manifestations")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Manifestation> getPendingManifestations(){
-		System.out.println("DOSOOOO");
 		ManifestationDAO dao = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
 		return dao.getPendingManifestationsList();
 	}
@@ -230,7 +229,10 @@ public class ManifestationService {
 	}
 	@GET
 	@Path("/allBuyers/manifestation={manifestation}")
-	public void getAllBuyers(@PathParam("manifestation") String manifestation) {
-		
+	public List<User> getAllBuyers(@PathParam("manifestation") String manifestation) {
+		CardDAO dao = (CardDAO) ctx.getAttribute("cardDAO");
+		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
+		ManifestationDAO mDAO = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
+		return mDAO.getBuyers(userDAO.getUsersList(), dao.getManifestationCardsReserved(manifestation));
 	}
 }

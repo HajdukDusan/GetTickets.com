@@ -1,7 +1,13 @@
 package services;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -10,6 +16,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -85,7 +92,7 @@ public class CardService {
 		System.out.println(points);
 		u.setCollectedPoints(points);
 		u.getUserType().checkPoints(u.getCollectedPoints());
-		u.getpCardsIds().add(c.getId());
+//		u.getpCardsIds().add(c.getId());
 		userDAO.save(u);
 		c.setStatus(false);
 		dao.save(c);
@@ -139,6 +146,79 @@ public class CardService {
 			userDAO.save(u);
 		}
 		return Response.ok("Uspesno ste kupili karte", MediaType.APPLICATION_JSON).build();
+	}
+	@GET
+	@Path("getManifCardsWorker/manifestation={manifestation}")
+	public List<Card> getManifCards(@PathParam("manifestation") String manifestation) {
+		CardDAO dao = (CardDAO) ctx.getAttribute("cardDAO");
+		return dao.getManifestationCardsReserved(manifestation);
+	}
+	@GET
+	@Path("searched")
+	public List<Card> searchedCards(
+			@QueryParam("cookie") String cookie,
+			@QueryParam("manifestacija") String manifestacija,
+			@QueryParam("cenaOd") Integer cenaOd,
+			@QueryParam("cenaDo") Integer cenaDo,
+			@QueryParam("datumOd") String datumOd,
+			@QueryParam("datumDo") String datumDo,
+			@QueryParam("tipKarte") CardType tipKarte,
+			@QueryParam("statusKarte") String status,
+			@QueryParam("sortBy") String sortBy,
+			@QueryParam("smer") String smer) throws ParseException,NumberFormatException{
+		CardDAO dao = (CardDAO) ctx.getAttribute("cardDAO");
+		UserDAO uDAO = (UserDAO) ctx.getAttribute("userDAO");
+		User u = uDAO.findUserCookie(cookie);
+		List<Card> cards;
+		
+		final Date dateOdValue =dao.cardStringToDate(datumOd);
+		final Date dateDoValue = dao.cardStringToDate(datumDo);
+		if(sortBy.equals("Ime manifestacija")) {
+			cards =  dao.getUserCards(u.getpCardsIds()).stream().filter(card -> {
+				return ((manifestacija == null || manifestacija.isEmpty() || card.getManifestation().toLowerCase().contains(manifestacija.toLowerCase()))
+						&& (cenaOd == null || (Integer.parseInt(card.getPrice()) > cenaOd))
+						&& (cenaDo == null || (Integer.parseInt(card.getPrice()) < cenaDo))
+						&& (dateOdValue == null || datumOd.isEmpty() || card.getManifestationDate().after(dateOdValue))
+						&& (dateDoValue == null || datumDo.isEmpty() || card.getManifestationDate().before(dateDoValue))
+						&& (tipKarte == null || card.getCardType().equals(tipKarte))
+						&& (status == null || status.isEmpty() || (Boolean.parseBoolean(status) == card.isStatus())));
+				}).sorted(Comparator.comparing(Card::getManifestation)).collect(Collectors.toList());
+		}
+		if(sortBy.equals("Cena Karte")) {
+			cards =  dao.getUserCards(u.getpCardsIds()).stream().filter(card -> {
+				return ((manifestacija == null || manifestacija.isEmpty() || card.getManifestation().toLowerCase().contains(manifestacija.toLowerCase()))
+						&& (cenaOd == null || (Integer.parseInt(card.getPrice()) > cenaOd))
+						&& (cenaDo == null || (Integer.parseInt(card.getPrice()) < cenaDo))
+						&& (dateOdValue == null || datumOd.isEmpty() || card.getManifestationDate().after(dateOdValue))
+						&& (dateDoValue == null || datumDo.isEmpty() || card.getManifestationDate().before(dateDoValue))
+						&& (tipKarte == null || card.getCardType().equals(tipKarte))
+						&& (status == null || status.isEmpty() || (Boolean.parseBoolean(status) == card.isStatus())));
+				}).sorted(Comparator.comparing(Card::getPrice)).collect(Collectors.toList());
+		}
+		if(sortBy.equals("Datum odrzavanja")) {
+			cards =  dao.getUserCards(u.getpCardsIds()).stream().filter(card -> {
+				return ((manifestacija == null || manifestacija.isEmpty() || card.getManifestation().toLowerCase().contains(manifestacija.toLowerCase()))
+						&& (cenaOd == null || (Integer.parseInt(card.getPrice()) > cenaOd))
+						&& (cenaDo == null || (Integer.parseInt(card.getPrice()) < cenaDo))
+						&& (dateOdValue == null || datumOd.isEmpty() || card.getManifestationDate().after(dateOdValue))
+						&& (dateDoValue == null || datumDo.isEmpty() || card.getManifestationDate().before(dateDoValue))
+						&& (tipKarte == null || card.getCardType().equals(tipKarte))
+						&& (status == null || status.isEmpty() || (Boolean.parseBoolean(status) == card.isStatus())));
+				}).sorted(Comparator.comparing(Card::getManifestationDate)).collect(Collectors.toList());
+		}
+		cards =  dao.getUserCards(u.getpCardsIds()).stream().filter(card -> {
+				return ((manifestacija == null || manifestacija.isEmpty() || card.getManifestation().toLowerCase().contains(manifestacija.toLowerCase()))
+						&& (cenaOd == null || (Integer.parseInt(card.getPrice()) > cenaOd))
+						&& (cenaDo == null || (Integer.parseInt(card.getPrice()) < cenaDo))
+						&& (dateOdValue == null || datumOd.isEmpty() || card.getManifestationDate().after(dateOdValue))
+						&& (dateDoValue == null || datumDo.isEmpty() || card.getManifestationDate().before(dateDoValue))
+						&& (tipKarte == null || card.getCardType().equals(tipKarte))
+						&& (status == null || status.isEmpty() || (Boolean.parseBoolean(status) == card.isStatus())));
+				}).sorted(Comparator.comparing(Card::getManifestation)).collect(Collectors.toList());
+		if(smer.equals("Rastuce")) {
+			Collections.reverse(cards);
+		}
+		return cards;
 	}
 
 }

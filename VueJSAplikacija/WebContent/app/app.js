@@ -31,6 +31,8 @@ const AdminNav = { template: "<admin-nav></admin-nav>" };
 const WorkerNav = { template: "<worker-nav></worker-nav>" };
 const KorisnikNav = { template: "<korisnik-nav></korisnik-nav>" };
 const UrediKomentare = { template: "<uredi-komentare></uredi-komentare>" };
+const Kupci = { template: "<kupci></kupci>" };
+const Karte = { template: "<karte-manifestacija></karte-manifestacija>" };
 const router = new VueRouter({
   mode: "hash",
   routes: [
@@ -56,6 +58,8 @@ const router = new VueRouter({
     { path: "/izmena-manifestacije", component: izmenaManifestacije },
     { path: "/korisnik-karte", component: PrikazKarti },
     { path: "/uredi-komentare", component: UrediKomentare },
+    { path: "/kupci", component: Kupci },
+    { path: "/karte-manifestacija", component: Karte },
   ],
 });
 

@@ -42,11 +42,13 @@ Vue.component("prikaz-manifestacija-worker", {
                     </b-card-text>
                    <div v-if="manifestacija.status === 'APPROVED'">
                     <b-button varient="primary" v-on:click="izmenaManifestacije(manifestacija)">Izmeni manifestaciju</b-button>
-                    <b-button varient="primary" v-on:click="izmenaManifestacije(manifestacija)">Kupci</b-button>
+                    <b-button varient="primary" v-on:click="kupciKarti(manifestacija)">Kupci</b-button>
+                    <b-button varient="primary" v-on:click="prodateKarte(manifestacija)">Karte</b-button>
                     </div>
                     <div v-if="manifestacija.status === 'FINISHED'">
                       <b-button varient="primary" v-on:click="urediKomentare(manifestacija)">Uredi komentare</b-button>
-                      <b-button varient="primary" v-on:click="izmenaManifestacije(manifestacija)">Kupci</b-button>
+                      <b-button varient="primary" v-on:click="kupciKarti(manifestacija)">Kupci</b-button>
+                      <b-button varient="primary" v-on:click="prodateKarte(manifestacija)">Karte</b-button>
                     </div>
  				  	      </b-card>
                      
@@ -61,8 +63,13 @@ Vue.component("prikaz-manifestacija-worker", {
   `,
 
   methods: {
+    prodateKarte(manifestacija) {
+      localStorage.setItem("manifestacija", manifestacija.name);
+      this.$router.push("/karte-manifestacija");
+    },
     kupciKarti(manifestacija) {
       localStorage.setItem("manifestacija", manifestacija.name);
+      this.$router.push("/kupci");
     },
     urediKomentare(manifestacija) {
       localStorage.setItem("manifestacija", manifestacija.name);

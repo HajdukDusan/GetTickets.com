@@ -1,5 +1,5 @@
 id,manifestation by name +date,price,buyers name,buyers surname, status, card type
-0000000100,Exit 2023,150,Pera,Peric,true,REGULAR,true
-0000000101,Exit 2023,150,Pera,Peric,true,REGULAR,true
-0000000110,Exit 2023,150,Pera,Peric,true,REGULAR,true
-0000001100,Exit 2023,160,Pera,Peric,false,REGULAR,false
+0000000100,Exit 2022,150,Pera,Peric,true,REGULAR,true
+0000000101,Exit 2022,150,Pera,Peric,true,REGULAR,true
+0000000110,Exit 2022,150,Pera,Peric,true,REGULAR,true
+0000001100,Exit 2022,160,Pera,Peric,false,REGULAR,false

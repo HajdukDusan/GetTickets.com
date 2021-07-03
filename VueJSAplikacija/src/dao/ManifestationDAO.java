@@ -15,10 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import beans.Card;
 import beans.Location;
 import beans.Manifestation;
 import beans.Manifestation.ManifestationStatus;
 import beans.Manifestation.ManifestationType;
+import beans.User;
 public class ManifestationDAO {
 
 	public ManifestationDAO(String path) { 
@@ -33,7 +35,6 @@ public class ManifestationDAO {
 		BufferedReader in = null;
 		try {
 			File file = new File(path);
-			System.out.println("KITA");
 			System.out.println(path);
 			in = new BufferedReader(new FileReader(file));
 			String line;
@@ -162,6 +163,29 @@ public class ManifestationDAO {
 		}
 		
 		return tmp;
+	}
+	public List<User> getBuyers(List<User> users,List<Card> cards){
+		List<User> buyers = new ArrayList<User>();
+		//za svakog korisnika proverimo da li ima kartu
+		for(User u: users) {
+			//ako je korisnik
+			if(u.getRole().equals("user")) {
+				for(String manif: u.getpCardsIds()) {
+					for(Card c: cards) {
+						
+						if(c.getId().equals(manif)) {
+							// samo unique
+							if(!buyers.contains(u)) {
+								buyers.add(u);
+							}
+							
+						}
+					}
+				}
+			}
+
+		}
+		return buyers;
 	}
 	public ArrayList<Manifestation> getManifestationsSearched(String naziv,String grad,Integer min,Integer max) {
 		ArrayList<Manifestation> manifestationsSearched = new ArrayList<Manifestation>();
