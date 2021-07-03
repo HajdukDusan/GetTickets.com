@@ -1,5 +1,6 @@
 Vue.component("prikaz-manifestacije", {
   data: function () {
+    var today = new Date();
     let map = new ol.Map({
       target: "mapOL",
       layers: [
@@ -23,18 +24,47 @@ Vue.component("prikaz-manifestacije", {
       rotation: 0,
       cookie: "",
       role: "",
+      preostalaKarte: 0,
+      brojKarti: 0,
+      options: ["REGULAR", "FAN_PIT", "VIP"],
+      tipKarte: "REGULAR",
+      vipCena: "",
+      fanPitCena: "",
+      cenaKarti: "",
+      userType: "",
+      popust: "",
+      canComment: false,
+      komentar: {
+        text: "",
+        grade: 0,
+        user: "",
+        manifestation: "",
+      },
     };
   },
   mounted() {
-    this.cookie = localStorage.getItem("cookie");
     this.role = localStorage.getItem("role");
+    if (this.role == null) {
+      this.role = "default";
+    }
+    this.cookie = localStorage.getItem("cookie");
+    if (this.cookie == null) {
+      this.cookie = "";
+    }
+    if (this.role === "user") {
+      this.loadUserType();
+    }
     this.manifestacijaNaziv = localStorage.getItem("manifestacija");
     this.loadManifestacija();
     this.loadKomentare();
+    this.loadProdateKarte();
   },
   template: `
   <div>
           <link rel="stylesheet" href="css/home.css" type="text/css">
+          <div v-if="role  === 'default'">
+          <default-nav></default-nav>
+        </div>
           <div v-if="role  === 'admin'">
           <admin-nav></admin-nav>
         </div>
@@ -43,9 +73,6 @@ Vue.component("prikaz-manifestacije", {
         </div>
         <div v-if="role  === 'user'">
           <korisnik-nav></korisnik-nav>
-        </div>
-        <div v-if="role  === ''">
-          <defaul-nav></defaul-nav>
         </div>
 
                 <b-card
@@ -138,18 +165,21 @@ Vue.component("prikaz-manifestacije", {
                 <br>
         </b-row>
         <b-row>
-          <div v-if="komentari == []">
             <h2>
             Komentari
             </h2>
-            </div>
             <br>
           <b-row>
           <div v-for="komentar in komentari">
-        
             <b-media right-align vertical-align="center">
               <template #aside>
-                <b-form-rating v-model="komentar.grade"></b-form-rating>
+                    <b-form-rating
+                id="rating-readonly"
+                v-model="komentar.grade"
+                no-border
+                readonly
+                variant="warning"
+              ></b-form-rating>
               </template>
               <h5 class="mt-0 mb-1">{{komentar.user}}</h5>
               <p class="mb-0">
@@ -157,6 +187,20 @@ Vue.component("prikaz-manifestacije", {
               </p>
             </b-media>
             <hr>
+            </div>
+            <div v-if="canComment">
+              <b-form @submit="submitKom">
+                <b-form-textarea
+                required
+                v-model="komentar.text"
+                id="textarea-default"
+                placeholder="Unesite komentar"
+              ></b-form-textarea>
+              <b-form-rating v-model="komentar.grade" variant="warning" no-border required></b-form-rating>
+                 <b-button type="submit" style="float: right">Komentarisi</b-button>
+              </b-form>
+            </div>
+
           </div>
 
         </b-card>
@@ -168,7 +212,22 @@ Vue.component("prikaz-manifestacije", {
   </div>
      `,
   methods: {
-      updateCenu() {
+    submitKom() {
+      axios.post(`rest/comment/addComment`, this.komentar);
+    },
+    checkIfCanComment() {
+      if (this.manifestacija.status === "FINISHED") {
+        axios
+          .get(
+            `rest/manifestation/checkIfAttended/cookie=${this.cookie}/manifestation=${this.manifestacijaNaziv}`
+          )
+          .then((response) => {
+            console.log(response.data);
+            this.canComment = response.data;
+          });
+      }
+    },
+    updateCenu() {
       if (this.tipKarte === "VIP") {
         this.cenaKarti = this.brojKarti * this.manifestacija.regularPrice * 4;
         this.cenaKarti = this.cenaKarti - this.cenaKarti * this.popust;
@@ -194,7 +253,7 @@ Vue.component("prikaz-manifestacije", {
         this.popust = response.data.userType.discount;
       });
     },
-      kupiKarte() {
+    kupiKarte() {
       if (this.preostalaKarte < this.brojKarti) {
         alert("Uneli ste veci broj karti od onih na stanju");
         return;
@@ -215,7 +274,7 @@ Vue.component("prikaz-manifestacije", {
           });
       }
     },
-      loadProdateKarte() {
+    loadProdateKarte() {
       axios
         .get(
           `rest/card/manifestationReservedCardsCount/${this.manifestacijaNaziv}`
@@ -237,7 +296,7 @@ Vue.component("prikaz-manifestacije", {
           this.fanPitCena = this.manifestacija.regularPrice * 2;
           this.vipCena = this.manifestacija.regularPrice * 4;
           this.center = this.location;
-          console.log(this.location);
+          this.checkIfCanComment();
         });
     },
     loadKomentare() {

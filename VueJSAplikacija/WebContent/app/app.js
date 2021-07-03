@@ -30,6 +30,7 @@ const DefaultNav = { template: "<default-nav></default-nav>" };
 const AdminNav = { template: "<admin-nav></admin-nav>" };
 const WorkerNav = { template: "<worker-nav></worker-nav>" };
 const KorisnikNav = { template: "<korisnik-nav></korisnik-nav>" };
+const UrediKomentare = { template: "<uredi-komentare></uredi-komentare>" };
 const router = new VueRouter({
   mode: "hash",
   routes: [
@@ -54,6 +55,7 @@ const router = new VueRouter({
     },
     { path: "/izmena-manifestacije", component: izmenaManifestacije },
     { path: "/korisnik-karte", component: PrikazKarti },
+    { path: "/uredi-komentare", component: UrediKomentare },
   ],
 });
 
