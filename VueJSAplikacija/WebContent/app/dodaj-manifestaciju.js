@@ -227,7 +227,6 @@ Vue.component("dodaj-manifestaciju", {
       }
     },
     onSubmit() {
-      alert(this.file);
       this.manifestacija.dateTime =
         this.manifestacija.date + "T" + this.manifestacija.time;
 
@@ -235,7 +234,7 @@ Vue.component("dodaj-manifestaciju", {
       this.manifestacija.location.longitude = this.location[1];
       //this.manifestacija.eventPoster = "";
       this.manifestacija.eventPoster = this.file;
-	  this.manifestacija.status = "PENDING";
+      this.manifestacija.status = "PENDING";
       axios
         .post(`rest/manifestation/saveManifestation`, this.manifestacija)
         .then((response) => alert("Uspesno dodata manifestacija"))
@@ -255,7 +254,6 @@ Vue.component("dodaj-manifestaciju", {
           JSON.stringify(canvas.toDataURL("image/png"))
         )
         .then((response) => {
-          alert("asdsada" + response.data);
           this.file = response.data;
         });
     },

@@ -23,9 +23,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.eclipse.yasson.internal.serializer.LocalDateTimeTypeDeserializer;
+
 import beans.Card;
 import beans.Card.CardType;
 import beans.Manifestation;
+import beans.Manifestation.ManifestationStatus;
+import beans.Manifestation.ManifestationType;
 import beans.User;
 import beans.UserOtkazivanje;
 import dao.CardDAO;
@@ -97,13 +101,11 @@ public class CardService {
 		u.setCollectedPoints(points);
 		u.getUserType().checkPoints(u.getCollectedPoints());
 //		u.getpCardsIds().add(c.getId());
+		UserOtkazivanje uo = new UserOtkazivanje(u.getUsername(), c.getId(),new java.util.Date());
+		userDAO.getOtkazivanja().add(uo);
 		userDAO.save(u);
 		c.setStatus(false);
 		dao.save(c);
-		
-		
-		UserOtkazivanje uot = new UserOtkazivanje(u.getUsername(), c.getId(), LocalDate.now());
-		userDAO.saveUserOtkazivanjetoFile(uot);
 		
 	}
 	@GET
@@ -119,7 +121,7 @@ public class CardService {
 		//pronadjemo korisnika koji kupuje karte
 		User u = userDAO.findUser(user.split("-")[0]);
 		//racunanje cene
-		Double price = (double)number * (double) m.getRegularPrice();
+		Double price = (double) m.getRegularPrice();
 		if(type.equals(CardType.VIP)) {
 			price = price*4;
 		}
@@ -152,6 +154,9 @@ public class CardService {
 			u.getpCardsIds().add(c.getId());
 			
 			userDAO.save(u);
+		}
+		if(Integer.parseInt(m.getNumberOfSeats()) == dao.getManifestationCardsReserved(manifestation).size()) {
+			m.setStatus(ManifestationStatus.SOLD_OUT);
 		}
 		return Response.ok("Uspesno ste kupili karte", MediaType.APPLICATION_JSON).build();
 	}

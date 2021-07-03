@@ -18,7 +18,7 @@ Vue.component("registracija-prodavca", {
   template: `
     <div>
         <link rel="stylesheet" href="css/home.css" type="text/css">
-        <default-nav></default-nav>
+        <admin-nav></admin-nav>
       <b-card id="page_content">
         <b-form @submit="onSubmit" @reset="onReset">
        <b-form-group id="input-group-1" label="Korisnicko ime:" label-for="input-1">

@@ -1,29 +1,25 @@
-Vue.component("karte-manifestacija", {
+Vue.component("pregled-karti", {
   data: function () {
     return {
       cookie: "",
       role: "",
-      manifestacijaNaziv: "",
       karte: [],
     };
   },
   mounted() {
     this.cookie = localStorage.getItem("cookie");
     this.role = localStorage.getItem("role");
-    this.manifestacijaNaziv = localStorage.getItem("manifestacija");
     this.loadKarte();
   },
   template: `
     <div>
-    
-    <worker-nav></worker-nav>
-        <link rel="stylesheet" href="css/page_style.css" type="text/css">
-    <b-card id="page_content" style= "height: 100vh;
-    overflow: hidden;
-    overflow-y: scroll; 
-    text-align: center;">
-    
-                              <b-row >
+    <admin-nav></admin-nav>
+              <link rel="stylesheet" href="css/page_style.css" type="text/css">
+	      <b-card id="page_content" style= "height: 100vh;
+  overflow: hidden;
+  overflow-y: scroll; 
+  text-align: center;">
+                  <b-row >
                   <div class ="col-md-4" v-for="karta in karte">
                   <b-col>
                    <b-card
@@ -36,28 +32,29 @@ Vue.component("karte-manifestacija", {
                       Cena: {{karta.price}} <br>
                       Tip: {{karta.cardType}} <br>
                       Datum: {{karta.manifestationDate}} <br>
+                      Status: {{karta.status}} <br>
                     </b-card-text>
                     
+
+                    </div>
                      </b-card>
                      
                     </b-col>
                     </div>
                   </b-row>
     
-    </b-card>
+        </b-card>
     
+    
+
     </div>
 
     `,
   methods: {
     loadKarte() {
-      axios
-        .get(
-          `rest/card/getManifCardsWorker/manifestation=${this.manifestacijaNaziv}`
-        )
-        .then((response) => {
-          this.karte = response.data;
-        });
+      axios.get(`rest/card/cards`).then((response) => {
+        this.karte = response.data;
+      });
     },
   },
 });

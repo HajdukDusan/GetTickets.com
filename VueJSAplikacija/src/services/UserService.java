@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.User;
+import beans.UserType;
 import dao.CardDAO;
 import dao.ManifestationDAO;
 import dao.UserDAO;
@@ -92,7 +93,23 @@ public class UserService {
 	public Response blockUser(@PathParam("name") String name){
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		User u = dao.findUser(name);
-		u.setBlocked(true);
+		if(u.isBlocked()) {
+			u.setBlocked(false);
+		}
+		else {
+			u.setBlocked(true);
+		}
+		dao.save(u);
+		return  Response.ok("", MediaType.APPLICATION_JSON).build();
+	}
+	@GET
+	@Path("/delete/name={name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteUser(@PathParam("name") String name){
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		User u = dao.findUser(name);
+
+		u.setDeleted(true);
 		dao.save(u);
 		return  Response.ok("", MediaType.APPLICATION_JSON).build();
 	}
@@ -107,6 +124,17 @@ public class UserService {
 		}
 		return  Response.ok("", MediaType.APPLICATION_JSON).build();
 	}
+	@GET
+	@Path("/testDeleted/name={name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response testDeleted(@PathParam("name") String name){
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		User u = dao.findUser(name);
+		if(u == null || u.isDeleted()) {
+			return  Response.ok("deleted", MediaType.APPLICATION_JSON).build();
+		}
+		return  Response.ok("", MediaType.APPLICATION_JSON).build();
+	}
 	@POST
 	@Path("/registerUser")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -116,6 +144,11 @@ public class UserService {
 		if(dao.findUser(userToRegister.getUsername()) != null) {
 			return Response.status(Response.Status.NOT_FOUND).entity("Username already used!").build();
 		}
+		userToRegister.setCollectedPoints(0.0);
+		userToRegister.setBlocked(false);
+		userToRegister.setDeleted(false);
+		userToRegister.setUserType(new UserType("BRONZE"));
+		userToRegister.setRole("user");
 		dao.save(userToRegister);
 		return Response.ok(MediaType.APPLICATION_JSON).build();
 	}
@@ -192,6 +225,6 @@ public class UserService {
 		
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 
-		return dao.getUsersWithPenals();
+		return dao.checkSumnjive();
 	}
 }   

@@ -11,7 +11,7 @@ Vue.component("pregled-korisnika", {
       tipoviKorisnika: ["", "user", "worker", "admin"],
       sortByList: ["imenu", "prezimenu", "korisnickom imenu"],
       sortBy: "imenu",
-      
+
       desc: "opadajuce",
       descList: ["opadajuce", "rastuce"],
     };
@@ -111,7 +111,7 @@ Vue.component("pregled-korisnika", {
                 </b-col>
                 
         </b-row>
-                      <b-row >
+                      <b-row>
                   <div class ="col-md-4" v-for="korisnik in korisnici">
                   <b-col>
                    <b-card
@@ -124,7 +124,18 @@ Vue.component("pregled-korisnika", {
                     Korisnicko ime: {{korisnik.username}} <br>
                     Lozinka: {{korisnik.password}} <br>
                     Tip korisnika: {{korisnik.role}} <br>
-
+                    <div v-if="korisnik.role !== 'admin'">
+                      <div v-if="korisnik.blocked">
+                          <b-button v-on:click="Blokiraj(korisnik)" variant="danger">Unblok</b-button>
+                          <b-button v-on:click="deleteUser(korisnik)" variant="danger">Obrisi</b-button>
+                      </div>
+                      <div v-else>
+                        <b-button v-on:click="Blokiraj(korisnik)" variant="danger">Blokiraj</b-button>
+                        <b-button v-on:click="deleteUser(korisnik)" variant="danger">Obrisi</b-button>
+                      </div>
+                      
+                    </div>
+                  
                      </b-card>
                      
                     </b-col>
@@ -136,6 +147,16 @@ Vue.component("pregled-korisnika", {
       `,
 
   methods: {
+    Blokiraj(korisnik) {
+      axios.get(`rest/user/blokiraj/name=${korisnik.name}`).then((response) => {
+        this.loadKorisnici();
+      });
+    },
+    deleteUser(korisnik) {
+      axios.get(`rest/user/delete/name=${korisnik.name}`).then((response) => {
+        this.loadKorisnici();
+      });
+    },
     loadKorisnici() {
       axios.get(`rest/user/users`).then((response) => {
         console.log(response.data);
@@ -156,13 +177,12 @@ Vue.component("pregled-korisnika", {
         this.tipKorisnika = '""';
       }
 
-	  let d = false;
+      let d = false;
 
       if (this.desc === "opadajuce") {
         d = true;
-      }
-      else {
-       d = false;
+      } else {
+        d = false;
       }
 
       axios
@@ -172,7 +192,7 @@ Vue.component("pregled-korisnika", {
         .then((response) => {
           this.korisnici = response.data;
         });
-      
+
       if (this.ime === '""') {
         this.ime = "";
       }

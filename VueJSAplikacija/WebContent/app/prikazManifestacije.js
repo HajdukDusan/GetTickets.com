@@ -97,7 +97,7 @@ Vue.component("prikaz-manifestacije", {
             Preostalo karti: {{preostalaKarte}} <br>
             <div v-if="manifestacija.status === 'FINISHED'">
                 Status: Odrzana <br>
-                Prosecna ocena: <br>
+                Prosecna ocena: {{calculateAverage(manifestacija)}} <br>
             </div>
             
                        <!-- KUPOVINA KARTI-->
@@ -212,8 +212,19 @@ Vue.component("prikaz-manifestacije", {
   </div>
      `,
   methods: {
+    calculateAverage(manifestacija) {
+      axios
+        .get(`rest/comment/averageScore/manifestation=${manifestacija.name}`)
+        .then((response) => {
+          manifestacija.prosecnaOcena = response.data;
+          return response.data;
+        });
+      return manifestacija.prosecnaOcena;
+    },
     submitKom() {
-      axios.post(`rest/comment/addComment`, this.komentar);
+      axios.post(`rest/comment/addComment`, this.komentar).then((response) => {
+        alert("Komentar je poslat na proveru!!");
+      });
     },
     checkIfCanComment() {
       if (this.manifestacija.status === "FINISHED") {

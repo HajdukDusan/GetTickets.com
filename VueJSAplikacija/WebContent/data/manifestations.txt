@@ -1,5 +1,5 @@
 name,manifestation type,number of seats, date and time, regular price, status, location, isDeleted,event poster
-Exit 2023,FESTIVAL,10,05-12-2021 11:37,150,FINISHED,52.82369,36.72477,7. Jula,Ns,Srbija,false,images/miajlo.png
-Exit 2022,FESTIVAL,12000,07-07-2021 11:37,150,FINISHED,52.82369,36.72477,7. Jula,Bg,Srbija,false,images/miajlo.png
-Exit 2021,FESTIVAL,12000,09-09-2021 11:37,150,APPROVED,48.13938035752346,17.203468899373483,Nikole Tesle 1,Zrenjanin,Srbija,false,images/miajlo.png
-Exit 2020,FESTIVAL,12000,17-02-2021 11:37,150,PENDING,52.82369,36.72477,7. Jula,Melenc,Srbija,false,images/miajlo.png
+Exit 2023,CONCERT,10,05-12-2021 11:37,150,FINISHED,52.82369,36.72477,7. Jula,Ns,Srbija,false,images/miajlo.png
+Exit 2022,FESTIVAL,12000,07-07-2021 11:37,250,FINISHED,52.82369,36.72477,7. Jula,Bg,Srbija,false,images/miajlo.png
+Exit 2021,FESTIVAL,10,09-09-2021 11:37,300,APPROVED,48.13938035752346,17.203468899373483,Nikole Tesle 1,Zrenjanin,Srbija,false,images/miajlo.png
+BeerFest 2021,FESTIVAL,12000,17-02-2021 11:37,450,PENDING,52.82369,36.72477,7. Jula,Melenc,Srbija,false,images/miajlo.png

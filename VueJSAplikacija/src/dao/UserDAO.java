@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -36,6 +37,7 @@ public class UserDAO {
 	
 	private HashMap<String, User> users= new HashMap<String,User>();
 	private ArrayList<User> usersList = new ArrayList<User>();
+	private ArrayList<UserOtkazivanje> otkazivanja = new ArrayList<UserOtkazivanje>();
 	String pathOtkaz;
 	String pathUsrs;
 	public HashMap<String, Integer> usersOtkazivanja = new HashMap<String, Integer>();
@@ -48,7 +50,36 @@ public class UserDAO {
 		i += 1;
 		usersOtkazivanja.put(name, i);
 	}
-	
+	@SuppressWarnings("deprecation")
+	public List<User> checkSumnjive() {
+		List<User> sumnjiviKorisnici = new ArrayList<User>();
+		Map<String,Integer> penali = new HashMap<String,Integer>();
+		System.out.println(otkazivanja);
+		for(UserOtkazivanje uo: otkazivanja) {
+			Date uoDate = uo.getTimeOfCancel();
+			Date now = new Date();
+			now.setMonth(now.getMonth()+1);
+			System.out.println(now + " " + new Date() + " " + uo.getTimeOfCancel());
+			if(uoDate.before(now)) {
+				if(penali.containsKey(uo.getUsername())) {
+					penali.put(uo.getUsername(), penali.get(uo.getUsername())+1);
+					users.get(uo.getUsername()).setNumOfPenals(penali.get(uo.getUsername()));
+				}
+				else {
+					penali.put(uo.getUsername(),1);
+					users.get(uo.getUsername()).setNumOfPenals(1);
+				}
+			}
+		}
+		System.out.println(penali);
+		for(String s: penali.keySet()) {
+			if(penali.get(s) >= 5) {
+				sumnjiviKorisnici.add(users.get(s));
+			}
+		}	
+		
+		return sumnjiviKorisnici;
+	}
 	public void saveUserOtkazivanjetoFile(UserOtkazivanje u) {
 		incrementOtkazivanje(u.username);
 		try {
@@ -78,43 +109,43 @@ public class UserDAO {
 		return users;
 	}
 	
-	public void loadOtkazivanja(String path) {
-		ArrayList<UserOtkazivanje> tmp = new ArrayList<UserOtkazivanje>();
-		BufferedReader in = null;
-		try {
-			File file = new File(path);
-			in = new BufferedReader(new FileReader(file));
-			String line;
-			String[] params;
-			line = in.readLine();
-			while ((line = in.readLine()) != null) {
-				params = line.split(",");
-				tmp.add(new UserOtkazivanje(params[0], params[1], LocalDate.parse(params[2])));
-			}
-		
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if ( in != null ) {
-				try {
-					in.close();
-				}
-				catch (Exception e) { }
-			}
-		}
-		
-		for(UserOtkazivanje u : tmp) {
-			if(u.timeOfCancel.getMonth().toString().equals(LocalDate.now().getMonth().toString())) {
-				Integer num = usersOtkazivanja.get(u.username);
-				if(num == null) {
-					num = 0;
-				}
-				num += 1;
-				usersOtkazivanja.put(u.username, num);
-				System.out.println(usersOtkazivanja.get(u.username));
-			}
-		}
-	}
+//	public void loadOtkazivanja(String path) {
+//		ArrayList<UserOtkazivanje> tmp = new ArrayList<UserOtkazivanje>();
+//		BufferedReader in = null;
+//		try {
+//			File file = new File(path);
+//			in = new BufferedReader(new FileReader(file));
+//			String line;
+//			String[] params;
+//			line = in.readLine();
+//			while ((line = in.readLine()) != null) {
+//				params = line.split(",");
+//				tmp.add(new UserOtkazivanje(params[0], params[1], LocalDate.parse(params[2])));
+//			}
+//		
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			if ( in != null ) {
+//				try {
+//					in.close();
+//				}
+//				catch (Exception e) { }
+//			}
+//		}
+//		
+//		for(UserOtkazivanje u : tmp) {
+//			if(u.timeOfCancel.getMonth().toString().equals(LocalDate.now().getMonth().toString())) {
+//				Integer num = usersOtkazivanja.get(u.username);
+//				if(num == null) {
+//					num = 0;
+//				}
+//				num += 1;
+//				usersOtkazivanja.put(u.username, num);
+//				System.out.println(usersOtkazivanja.get(u.username));
+//			}
+//		}
+//	}
 	
 	public UserDAO(String path,String otkazivanjaPath, ManifestationDAO mDAO,CardDAO cDAO) {
 		System.out.println(path);
@@ -122,7 +153,7 @@ public class UserDAO {
 		loadUsers(path,mDAO,cDAO);
 		pathUsrs = path;
 		pathOtkaz = otkazivanjaPath;
-		loadOtkazivanja(otkazivanjaPath);
+		//loadOtkazivanja(otkazivanjaPath);
 	}
 
 	public UserDAO(String contextPath) {
@@ -147,6 +178,9 @@ public class UserDAO {
 		System.out.println(username + password);
 		User u = users.get(username);
 		if(!u.getPassword().equals(password)) {
+			return null;
+		}
+		if(u.isBlocked() || u.isDeleted()) {
 			return null;
 		}
 		System.out.println(username + password);
@@ -360,5 +394,13 @@ public class UserDAO {
 		}
 		
 		return sorted;
+	}
+
+	public ArrayList<UserOtkazivanje> getOtkazivanja() {
+		return otkazivanja;
+	}
+
+	public void setOtkazivanja(ArrayList<UserOtkazivanje> otkazivanja) {
+		this.otkazivanja = otkazivanja;
 	}
 } 

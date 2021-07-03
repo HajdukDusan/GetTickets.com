@@ -8,11 +8,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.FileSystems;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
@@ -33,8 +38,11 @@ import javax.xml.bind.DatatypeConverter;
 import beans.Card;
 import beans.Manifestation;
 import beans.User;
+import beans.Card.CardType;
 import beans.Manifestation.ManifestationStatus;
+import beans.Manifestation.ManifestationType;
 import dao.CardDAO;
+import dao.CommentDAO;
 import dao.ManifestationDAO;
 import dao.UserDAO;
 @Path("/manifestation")
@@ -234,5 +242,77 @@ public class ManifestationService {
 		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
 		ManifestationDAO mDAO = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
 		return mDAO.getBuyers(userDAO.getUsersList(), dao.getManifestationCardsReserved(manifestation));
+	}
+	@GET
+	@Path("/searched")
+	public List<Manifestation> searched(
+			@QueryParam("manifestacija") String manifestacija,
+			@QueryParam("cenaOd") Integer cenaOd,
+			@QueryParam("cenaDo") Integer cenaDo,
+			@QueryParam("datumOd") String datumOd,
+			@QueryParam("datumDo") String datumDo,
+			@QueryParam("lokacija") String lokacija,
+			@QueryParam("statusKarte") String status,
+			@QueryParam("sortBy") String sortBy,
+			@QueryParam("smer") String smer,
+			@QueryParam("tipManifestacije") ManifestationType tipManifestacije,
+			@QueryParam("raspolozivost") String raspolozivost) throws ParseException,NumberFormatException{
+		List<Manifestation> manifestations = new ArrayList<Manifestation>();
+		CommentDAO cDAO = (CommentDAO) ctx.getAttribute("commentDAO");
+		ManifestationDAO mDAO = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
+		CardDAO dao = (CardDAO) ctx.getAttribute("cardDAO");
+
+		final Date dateOdValue = mDAO.manifStringToDate(datumOd);
+		final Date dateDoValue = mDAO.manifStringToDate(datumDo);
+		if(sortBy.equals("Lokacija")) {
+			manifestations =  mDAO.getManifestationsList().stream().filter(manifestation -> {
+				return ((manifestacija == null || manifestacija.isEmpty() || manifestation.getName().toLowerCase().contains(manifestacija.toLowerCase()))
+						&& (cenaOd == null || (manifestation.getRegularPrice() > cenaOd))
+						&& (cenaDo == null || (manifestation.getRegularPrice() < cenaDo))
+						&& (dateOdValue == null || datumOd.isEmpty() || manifestation.getDateTime().after(dateOdValue))
+						&& (dateDoValue == null || datumDo.isEmpty() || manifestation.getDateTime().before(dateDoValue))
+						&& (lokacija == null || lokacija.isEmpty()  || manifestation.getLocation().getCity().toLowerCase().contains(lokacija.toLowerCase()))
+						&& (tipManifestacije == null || manifestation.getManifestationType().equals(tipManifestacije))
+						&& (raspolozivost == null || raspolozivost.isEmpty() 
+						|| (Integer.parseInt(manifestation.getNumberOfSeats())==dao.getManifestationCardsReserved(manifestation.getName()).size()))
+						);
+				}).sorted(Comparator.comparing(Manifestation::getLocation)).collect(Collectors.toList());
+		}
+		if(sortBy.equals("Cena Karte")) {
+			manifestations =  mDAO.getManifestationsList().stream().filter(manifestation -> {
+				return ((manifestacija == null || manifestacija.isEmpty() || manifestation.getName().toLowerCase().contains(manifestacija.toLowerCase()))
+						&& (cenaOd == null || (manifestation.getRegularPrice() > cenaOd))
+						&& (cenaDo == null || (manifestation.getRegularPrice() < cenaDo))
+						&& (dateOdValue == null || datumOd.isEmpty() || manifestation.getDateTime().after(dateOdValue))
+						&& (dateDoValue == null || datumDo.isEmpty() || manifestation.getDateTime().before(dateDoValue))
+						&& (lokacija == null || lokacija.isEmpty()  || manifestation.getLocation().getCity().toLowerCase().contains(lokacija.toLowerCase()))
+						&& (tipManifestacije == null || manifestation.getManifestationType().equals(tipManifestacije))
+						&& (raspolozivost == null || raspolozivost.isEmpty() 
+						|| (Integer.parseInt(manifestation.getNumberOfSeats())==dao.getManifestationCardsReserved(manifestation.getName()).size()))
+						);
+				}).sorted(Comparator.comparing(Manifestation::getRegularPrice)).collect(Collectors.toList());
+		}
+		if(sortBy.equals("Datum odrzavanja") ) {
+			manifestations =  mDAO.getManifestationsList().stream().filter(manifestation -> {
+				return ((manifestacija == null || manifestacija.isEmpty() || manifestation.getName().toLowerCase().contains(manifestacija.toLowerCase()))
+						&& (cenaOd == null || (manifestation.getRegularPrice() > cenaOd))
+						&& (cenaDo == null || (manifestation.getRegularPrice() < cenaDo))
+						&& (dateOdValue == null || datumOd.isEmpty() || manifestation.getDateTime().after(dateOdValue))
+						&& (dateDoValue == null || datumDo.isEmpty() || manifestation.getDateTime().before(dateDoValue))
+						&& (lokacija == null || lokacija.isEmpty()  || manifestation.getLocation().getCity().toLowerCase().contains(lokacija.toLowerCase()))
+						&& (tipManifestacije == null || manifestation.getManifestationType().equals(tipManifestacije))
+						&& (raspolozivost == null || raspolozivost.isEmpty()|| !manifestation.getStatus().equals(ManifestationStatus.SOLD_OUT))
+						);
+				}).sorted(Comparator.comparing(Manifestation::getDateTime)).collect(Collectors.toList());
+		}
+		if(smer.equals("Rastuce")) {
+			Collections.reverse(manifestations);
+		}
+//		for(Manifestation m: manifestations) {
+//			if(m.getStatus().equals(ManifestationStatus.FINISHED)) {
+//				m.setProsecnaOcena(cDAO.calculateAverage(m.getName()));
+//			}
+//		}
+		return manifestations;
 	}
 }

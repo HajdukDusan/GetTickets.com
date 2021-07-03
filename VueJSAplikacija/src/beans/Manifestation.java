@@ -18,7 +18,7 @@ public class Manifestation {
 	}
 	
 	public enum ManifestationStatus{
-		PENDING, DENIED, APPROVED, FINISHED
+		PENDING, DENIED, APPROVED, FINISHED, SOLD_OUT
 	}
 	
 	private String name;
@@ -28,6 +28,7 @@ public class Manifestation {
 	private Date dateTime;
 	private Integer regularPrice;
 	private ManifestationStatus status;
+	private Double prosecnaOcena;
 	private Location location;
 	// treba promenuti
 	private String eventPoster;
@@ -48,8 +49,17 @@ public class Manifestation {
 		this.location = location;
 		this.eventPoster = eventPoster;
 		this.isDeleted = isDeleted;
+		this.prosecnaOcena = 0.0;
 	}
 	
+	public Double getProsecnaOcena() {
+		return prosecnaOcena;
+	}
+
+	public void setProsecnaOcena(Double prosecnaOcena) {
+		this.prosecnaOcena = prosecnaOcena;
+	}
+
 	public String getCookie() {
 		return cookie;
 	}

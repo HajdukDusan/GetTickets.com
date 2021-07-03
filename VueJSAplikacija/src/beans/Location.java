@@ -1,6 +1,6 @@
 package beans;
 
-public class Location {
+public class Location implements Comparable<Location> {
 	// geo. duzina
 	private String longitude;
 	//geo. sirina
@@ -101,6 +101,12 @@ public class Location {
 	public String toString() {
 		return longitude + "," + latitude + "," + address + "," + city
 				+ "," + country;
+	}
+
+
+	@Override
+	public int compareTo(Location o) {
+		return this.getCity().compareTo(o.getCity());
 	}
 
 }

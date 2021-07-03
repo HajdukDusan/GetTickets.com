@@ -10,6 +10,8 @@ Vue.component("admin-nav", {
           <b-navbar-nav>
             <b-nav-item href="#/">Home</b-nav-item>
             <b-nav-item href="#/pregled-korisnika">Korisnici</b-nav-item>
+            <b-nav-item href="#/pregled-manifestacija">Manifestacije</b-nav-item>
+            <b-nav-item href="#/pregled-karti">Karte</b-nav-item>
             <b-nav-item href="#/potvrda-manifestacija">Potvrda Manifestacija</b-nav-item>
             <b-nav-item href="#/registracija-prodavca">Kreiraj Prodavca</b-nav-item>
             <b-nav-item href="#/sumnjivi-korisnici">Sumnjivi Korisnici</b-nav-item>
@@ -29,7 +31,7 @@ Vue.component("admin-nav", {
   methods: {
     logout() {
       localStorage.clear();
-      this.$router.push("/");
+      this.$router.push("/login");
     },
   },
 });

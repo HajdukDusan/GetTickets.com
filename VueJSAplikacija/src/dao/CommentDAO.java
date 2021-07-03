@@ -76,7 +76,15 @@ public class CommentDAO {
 			}
 		}
 	}
-	
+	public List<Comment> findByManifestation(String manifestation){
+		ArrayList<Comment> commentsManif = new ArrayList<Comment>();
+		for(Comment c: commentsList) {
+			if(c.getManifestation().equals(manifestation)) {
+				commentsManif.add(c);
+				}
+		}
+		return commentsManif;
+	}
 	public List<Comment> findByManifestation(String manifestation,CommentStatus status){
 		ArrayList<Comment> commentsManif = new ArrayList<Comment>();
 		for(Comment c: commentsList) {
@@ -122,9 +130,7 @@ public class CommentDAO {
 	public void setCommentsList(ArrayList<Comment> commentsList) {
 		this.commentsList = commentsList;
 	}
-
-
-	public List<Comment> findByManifestation(String manifestation) {
+	public List<Comment> findByManifestationApproved(String manifestation) {
 		ArrayList<Comment> commentsManif = new ArrayList<Comment>();
 		for(Comment c: commentsList) {
 			if(c.getManifestation().equals(manifestation)) {
@@ -133,5 +139,13 @@ public class CommentDAO {
 		}
 		return commentsManif;
 	}
-	
+
+	public Double calculateAverage(String manifestation) {
+		List<Comment> comments = findByManifestation(manifestation,CommentStatus.APPROVED);
+		Double score = 0.0;
+		for(Comment c: comments) {
+			score += Double.parseDouble(c.getGrade());
+		}
+		return score/comments.size();
+	}
 }

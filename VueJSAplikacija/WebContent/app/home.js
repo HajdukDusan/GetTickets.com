@@ -2,14 +2,26 @@ Vue.component("home", {
   data: function () {
     return {
       manifestacije: [],
-      searchNaziv: "",
-      searchGrad: "",
-      pocetakDatum: "2019-06-03",
-      krajDatum: "2021-06-03",
+      manifestacijaNaziv: "",
+      grad: "",
+      cenaOd: "",
+      cenaDo: "",
+      datumOd: "",
+      datumDo: "",
+      sortBy: "Datum odrzavanja",
+      tipManifestacije: "",
+      statusKarte: "",
+      smer: "Rastuce",
+      raspolozivost: "",
+      smerOptions: ["Rastuce", "Opadajuce"],
+      sortByOptions: ["Lokacija", "Cena Karte", "Datum odrzavanja"],
+      filterByTip: ["", "CONCERT", "FESTIVAL"],
+      filterByRaspoloziv: ["", "Ima na lageru"],
       minCena: 0,
       maxCena: 0,
       cookie: "",
       role: null,
+      prosecnaOcena: "",
     };
   },
   mounted() {
@@ -21,7 +33,7 @@ Vue.component("home", {
     if (this.cookie == null) {
       this.cookie = "";
     }
-    this.getManifestations();
+    this.getManifestationsSearched();
   },
   template: `
     <div>
@@ -39,9 +51,9 @@ Vue.component("home", {
         </div>
         <link rel="stylesheet" href="css/home.css" type="text/css">
 	      <b-card id="page_content" style= "height: 100vh;
-  overflow: hidden;
-  overflow-y: scroll; 
-  text-align: center;">
+          overflow: hidden;
+          overflow-y: scroll; 
+          text-align: center;">
     
           <b-row>
             <b-col>
@@ -52,7 +64,7 @@ Vue.component("home", {
                   <b-form-input
                       placeholder="Pretrazi po nazivu..."
                       v-on:input="getManifestationsSearched"
-                      v-model="searchNaziv"
+                      v-model="manifestacijaNaziv"
                       type="search"/>
                 </b-input-group>
                 </b-col>
@@ -64,18 +76,18 @@ Vue.component("home", {
                   <b-form-input
                       placeholder="Pretrazi po gradu..."
                       v-on:input="getManifestationsSearched"
-                      v-model="searchGrad"
+                      v-model="grad"
                       type="search"/>
                        </b-input-group>
                 </b-col>
                                 <b-col>
                                  <b-input-group>
                  <template #prepend>
-                     <b-input-group-text >Cena do:</b-input-group-text>
+                     <b-input-group-text >Cena od:</b-input-group-text>
                     </template>
                 <b-form-input
                       placeholder="Maksimalnu cenu.."
-                      v-model="maxCena"
+                      v-model="cenaOd"
                       v-on:input="getManifestationsSearched"
                       type="number"
                       min = "0"/>
@@ -84,11 +96,11 @@ Vue.component("home", {
                 <b-col>
                  <b-input-group>
                  <template #prepend>
-                     <b-input-group-text >Cena od:</b-input-group-text>
+                     <b-input-group-text >Cena do:</b-input-group-text>
                     </template>
                   <b-form-input
                       placeholder="Minimalnu cenu.."
-                      v-model="minCena"
+                      v-model="cenaDo"
                       v-on:input="getManifestationsSearched"
                       type="number"/>
                        </b-input-group>
@@ -101,8 +113,8 @@ Vue.component("home", {
                  <template #prepend>
                      <b-input-group-text >Datum od:</b-input-group-text>
                     </template>
-                                  <b-form-input
-                                  v-model="pocetakDatum"
+                     <b-form-input
+                                  v-model="datumOd"
                       v-on:input="getManifestationsSearched"
                       type="date"/>
                       </b-input-group>
@@ -113,7 +125,7 @@ Vue.component("home", {
                      <b-input-group-text >Datum do:</b-input-group-text>
                     </template>
                     <b-form-input
-                                  v-model="krajDatum"
+                      v-model="datumDo"
                       v-on:input="getManifestationsSearched"
                       type="date"/>
                       </b-input-group>
@@ -122,6 +134,58 @@ Vue.component("home", {
                 </b-row>
 
               <br>
+                <b-row>
+                                <b-col>
+                  <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Sort by</b-input-group-text>
+                    </template>
+                <b-form-select
+                      placeholder="Izaberite sort"
+                      v-model="sortBy"
+                      :options="sortByOptions"
+                      v-on:input="getManifestationsSearched"/>
+                      </b-input-group>
+                </b-col>
+                <b-col>
+                  <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Smer</b-input-group-text>
+                    </template>
+                <b-form-select
+                      v-model="smer"
+                      :options="smerOptions"
+                      v-on:input="getManifestationsSearched"/>
+                      </b-input-group>
+                </b-col>
+                                <b-col>
+                  <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Tip manifestacije</b-input-group-text>
+                    </template>
+                <b-form-select
+                      placeholder="Izaberite sort"
+                      v-model="tipManifestacije"
+                      :options="filterByTip"
+                      v-on:input="getManifestationsSearched"/>
+                      </b-input-group>
+                </b-col>
+                <b-col>
+                  <b-input-group>
+                 <template #prepend>
+                     <b-input-group-text >Raspolozivost</b-input-group-text>
+                    </template>
+                <b-form-select
+                      placeholder="Izaberite sort"
+                      v-model="raspolozivost"
+                      :options="filterByRaspoloziv"
+                      v-on:input="getManifestationsSearched"/>
+                      </b-input-group>
+                </b-col>
+                
+                
+                
+                </b-row>
               <b-row>
 
               </b-row>
@@ -141,8 +205,8 @@ Vue.component("home", {
                       Datum: {{ fixDate(manifestacija) }} <br>
                       Cena karte: {{ manifestacija.regularPrice  }} <br>
                       Lokacija: {{ manifestacija.location.address  }}, {{ manifestacija.location.city  }}, {{ manifestacija.location.country  }}<br>
-                      <div v-if="manifestacija.status == false">
-                        Prosecna ocena: {{ manifestacija.regularPrice  }} <br>
+                      <div v-if="manifestacija.status === 'FINISHED'">
+                        Prosecna ocena: {{ calculateAverage(manifestacija)  }} <br>
                       </div>
              		    </b-card-text>
 
@@ -158,6 +222,15 @@ Vue.component("home", {
     `,
 
   methods: {
+    calculateAverage(manifestacija) {
+      axios
+        .get(`rest/comment/averageScore/manifestation=${manifestacija.name}`)
+        .then((response) => {
+          manifestacija.prosecnaOcena = response.data;
+          return response.data;
+        });
+      return manifestacija.prosecnaOcena;
+    },
     izmeniManifestaciju(manifestacija) {
       localStorage.setItem("manifestacija", manifestacija.name);
       this.$router.push("/izmena-manifestacije");
@@ -178,34 +251,26 @@ Vue.component("home", {
       console.log(this.manifestacije);
     },
     getManifestationsSearched() {
-      if (this.searchNaziv === "") {
-        this.searchNaziv = '""';
-      }
-      if (this.searchGrad === "") {
-        this.searchGrad = '""';
-      }
-      if (this.maxCena == "") {
-        this.maxCena = 0;
-      }
-      if (this.minCena == "") {
-        this.minCena = 0;
-      }
       axios
-        .get(
-          `rest/manifestation/manifestationsSeached/naziv=${this.searchNaziv}/grad=${this.searchGrad}/min=${this.minCena}/max=${this.maxCena}/minDatum=${this.pocetakDatum}/maxDatum=${this.krajDatum}`
-        )
-        .then((response) => {
-          //axios.get(`rest/manifestation/manifestationsSeached/naziv=""/grad=${this.searchGrad}`).then((response) => {
-          this.manifestacije = response.data;
-          console.log(response.data);
+        .get(`rest/manifestation/searched`, {
+          params: {
+            manifestacija: this.manifestacijaNaziv,
+            lokacija: this.grad,
+            cenaOd: this.cenaOd,
+            cenaDo: this.cenaDo,
+            datumOd: this.datumOd,
+            datumDo: this.datumDo,
+            sortBy: this.sortBy,
+            tipManifestacije: this.tipManifestacije,
+            statusKarte: this.statusKarte,
+            smer: this.smer,
+            raspolozivost: this.raspolozivost,
+          },
+        })
+        .then((resp) => {
+          this.manifestacije = resp.data;
+          console.log(this.manifestacije);
         });
-      console.log(this.manifestacije);
-      if (this.searchGrad === '""') {
-        this.searchGrad = "";
-      }
-      if (this.searchNaziv === '""') {
-        this.searchNaziv = "";
-      }
     },
     getImgUrl(manifestacija) {
       return manifestacija.eventPoster;

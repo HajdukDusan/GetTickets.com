@@ -119,6 +119,7 @@ public class CardDAO {
 		// 	}
 		// }
 	}
+
 	public HashMap<String, Card> getCards() {
 		return cards;
 	}

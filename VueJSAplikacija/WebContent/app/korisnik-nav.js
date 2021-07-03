@@ -26,7 +26,7 @@ Vue.component("korisnik-nav", {
   methods: {
     logout() {
       localStorage.clear();
-      this.$router.push("/");
+      this.$router.push("/login");
     },
   },
 });

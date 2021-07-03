@@ -1,12 +1,16 @@
 const HomePage = { template: "<home></home>" };
 const Registracija = { template: "<registracija></registracija>" };
-const RegistracijaProdavca = { template: "<registracija-prodavca></registracija-prodavca>" };
+const RegistracijaProdavca = {
+  template: "<registracija-prodavca></registracija-prodavca>",
+};
 const Login = { template: "<login></login>" };
 const HomeAdmin = { template: "<home-admin></home-admin>" };
 const HomeWorker = { template: "<home-worker></home-worker>" };
 const HomeKorisnik = { template: "<home-korisnik></home-korisnik>" };
 const EditProfil = { template: "<edit-profil></edit-profil>" };
-const SumnjiviKorisnici = { template: "<sumnjivi-korisnici></sumnjivi-korisnici>" };
+const SumnjiviKorisnici = {
+  template: "<sumnjivi-korisnici></sumnjivi-korisnici>",
+};
 const PregledKorisnika = {
   template: "<pregled-korisnika></pregled-korisnika>",
 };
@@ -35,6 +39,10 @@ const KorisnikNav = { template: "<korisnik-nav></korisnik-nav>" };
 const UrediKomentare = { template: "<uredi-komentare></uredi-komentare>" };
 const Kupci = { template: "<kupci></kupci>" };
 const Karte = { template: "<karte-manifestacija></karte-manifestacija>" };
+const PregledKarti = { template: "<pregled-karti></pregled-karti>" };
+const PregledManifestacija = {
+  template: "<pregled-manifestacija></pregled-manifestacija>",
+};
 const router = new VueRouter({
   mode: "hash",
   routes: [
@@ -64,6 +72,8 @@ const router = new VueRouter({
     { path: "/uredi-komentare", component: UrediKomentare },
     { path: "/kupci", component: Kupci },
     { path: "/karte-manifestacija", component: Karte },
+    { path: "/pregled-manifestacija", component: PregledManifestacija },
+    { path: "/pregled-karti", component: PregledKarti },
   ],
 });
 

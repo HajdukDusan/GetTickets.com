@@ -25,7 +25,7 @@ public class UserType {
 			this.type = "BRONZE";
 			this.discount = 0.0;
 		}
-		if(points< 4000) {
+		else if(points< 4000) {
 			this.type = "SILVER";
 			this.discount = 0.03;
 		}

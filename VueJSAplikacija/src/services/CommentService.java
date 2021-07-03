@@ -85,4 +85,10 @@ public class CommentService {
 		Comment c = dao.updateStatus(korisnik.split("-")[0], manifestacija, text, grade,status);
 		System.out.println(c);
 	}
+	@GET
+	@Path("/averageScore/manifestation={manifestation}")
+	public Double averageScore(@PathParam("manifestation") String manifestation) {
+		CommentDAO dao = (CommentDAO) ctx.getAttribute("commentDAO");
+		return dao.calculateAverage(manifestation);
+	}
 }

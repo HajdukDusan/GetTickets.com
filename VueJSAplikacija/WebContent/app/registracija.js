@@ -8,8 +8,6 @@ Vue.component("registracija", {
         surname: "",
         gender: "",
         birthDate: "",
-        userType: { type: "bronze", discount: "", requiredPoints: "" },
-        collectedPoints: 0,
         role: "user",
       },
       pol: ["M", "F"],

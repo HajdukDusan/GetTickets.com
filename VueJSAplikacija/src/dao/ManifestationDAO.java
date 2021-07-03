@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +31,12 @@ public class ManifestationDAO {
 	
 	private HashMap<String,Manifestation> manifestations = new HashMap<String,Manifestation>();
 	private ArrayList<Manifestation> manifestationsList = new ArrayList<Manifestation>();
-	
+	public Date manifStringToDate(String date) throws ParseException {
+		if(date == null || date.isEmpty()) {
+			return null;
+		}
+		return new SimpleDateFormat("yyyy-MM-dd").parse(date); 
+	}
 	public void loadManifestation(String path) {
 		BufferedReader in = null;
 		try {
