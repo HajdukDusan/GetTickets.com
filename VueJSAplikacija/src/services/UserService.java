@@ -102,7 +102,7 @@ public class UserService {
 	public Response testblokiran(@PathParam("name") String name){
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		User u = dao.findUser(name);
-		if(u.isBlocked()) {
+		if(u == null || u.isBlocked()) {
 			return  Response.ok("blokiran", MediaType.APPLICATION_JSON).build();
 		}
 		return  Response.ok("", MediaType.APPLICATION_JSON).build();

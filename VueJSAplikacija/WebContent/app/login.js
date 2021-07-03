@@ -46,15 +46,17 @@ Vue.component("login", {
         .get(`rest/user/testblokiran/name=${this.form.username}`)
         .then((response) => {
           console.log(response.data);
-          if(response.data == "blokiran") {
+          if(response.data === "blokiran") {
           	this.blocked = true;
           }
           else{
           this.blocked = false;
+          this.login();
           }
         })
-    if(this.blocked != true){
-      axios
+    },
+    login(){
+          axios
         .get(`rest/user/loginUser/${this.form.username}/${this.form.password}`)
         .then((response) => {
           console.log(response.data);
@@ -68,7 +70,7 @@ Vue.component("login", {
           console.log("Greska.");
           alert("Uneti nevalidni ili nepostojeći parametri, pokušajte ponovo.");
         });
-     }
-    },
+    
+    }
   },
 });

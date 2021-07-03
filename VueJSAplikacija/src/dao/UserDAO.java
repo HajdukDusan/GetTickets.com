@@ -158,7 +158,7 @@ public class UserDAO {
 		users.put(user.getUsername(),user);
 		Collection<User> values = users.values();
 		usersList = new ArrayList<>(values);
-		
+		/*
 		BufferedWriter out = null;
 		try {
 			File file = new File(pathUsrs);
@@ -184,7 +184,7 @@ public class UserDAO {
 				catch (Exception e) { }
 			}
 		}
-		
+		*/
 		return user;
 		
 	}
