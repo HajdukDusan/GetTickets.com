@@ -40,9 +40,15 @@ Vue.component("prikaz-manifestacija-worker", {
                     <b-card-text>
                       Tip: {{ manifestacija.manifestationType }} <br>
                     </b-card-text>
-
+                   <div v-if="manifestacija.status === 'APPROVED'">
                     <b-button varient="primary" v-on:click="izmenaManifestacije(manifestacija)">Izmeni manifestaciju</b-button>
-                     </b-card>
+                    <b-button varient="primary" v-on:click="izmenaManifestacije(manifestacija)">Kupci</b-button>
+                    </div>
+                    <div v-if="manifestacija.status === 'FINISHED'">
+                      <b-button varient="primary" v-on:click="urediKomentare(manifestacija)">Uredi komentare</b-button>
+                      <b-button varient="primary" v-on:click="izmenaManifestacije(manifestacija)">Kupci</b-button>
+                    </div>
+ 				  	      </b-card>
                      
                     </b-col>
                     </div>
@@ -55,6 +61,13 @@ Vue.component("prikaz-manifestacija-worker", {
   `,
 
   methods: {
+    kupciKarti(manifestacija) {
+      localStorage.setItem("manifestacija", manifestacija.name);
+    },
+    urediKomentare(manifestacija) {
+      localStorage.setItem("manifestacija", manifestacija.name);
+      this.$router.push("/uredi-komentare");
+    },
     onSubmit(manifestacija) {},
     getImgUrl(manifestacija) {
       return manifestacija.eventPoster;

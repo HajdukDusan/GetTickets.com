@@ -30,9 +30,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.DatatypeConverter;
 
+import beans.Card;
 import beans.Manifestation;
 import beans.User;
 import beans.Manifestation.ManifestationStatus;
+import dao.CardDAO;
 import dao.ManifestationDAO;
 import dao.UserDAO;
 @Path("/manifestation")
@@ -207,5 +209,28 @@ public class ManifestationService {
 		
        // manifestation.setEventPoster("images\\test" + extension);
 	}
-	
+	@GET
+	@Path("/checkIfAttended/cookie={cookie}/manifestation={manifestation}")
+	public boolean checkIfAttended(@PathParam("cookie") String cookie,@PathParam("manifestation") String manifestation) {
+		CardDAO dao = (CardDAO) ctx.getAttribute("cardDAO");
+		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
+		ManifestationDAO mDAO = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
+		
+		User u = userDAO.findUserCookie(cookie);
+		List<Card> cards = dao.getManifestationCardsReserved(manifestation);
+		for(String id: u.getpCardsIds()) {
+			for(Card c: cards) {
+				if(c.getId().equals(id)) {
+					return true;
+				}
+			}
+		}
+		return false;
+		
+	}
+	@GET
+	@Path("/allBuyers/manifestation={manifestation}")
+	public void getAllBuyers(@PathParam("manifestation") String manifestation) {
+		
+	}
 }

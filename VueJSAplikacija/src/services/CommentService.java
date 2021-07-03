@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -14,6 +15,7 @@ import dao.CommentDAO;
 import dao.ManifestationDAO;
 import dao.UserDAO;
 import beans.Comment;
+import beans.Comment.CommentStatus;
 @Path("/comment")
 public class CommentService {
 	
@@ -53,6 +55,34 @@ public class CommentService {
 	@Path("/manifestation={manifestation}")
 	  public List<Comment> allComments(@PathParam(value = "manifestation") String manifestation) {  
 		CommentDAO dao = (CommentDAO) ctx.getAttribute("commentDAO");
+	    return dao.findByManifestation(manifestation,CommentStatus.APPROVED);
+	}
+	@GET
+	@Path("/manifestationAll/manifestacija={manifestation}")
+	  public List<Comment> allCommentsManif(@PathParam(value = "manifestation") String manifestation) {  
+		CommentDAO dao = (CommentDAO) ctx.getAttribute("commentDAO");
 	    return dao.findByManifestation(manifestation);
-	  } 
+	}
+	@POST
+	@Path("/addComment")
+	public void addComment(Comment comment) {
+		CommentDAO dao = (CommentDAO) ctx.getAttribute("commentDAO");
+		comment.setStatus(CommentStatus.PENDING);
+		dao.save(comment);
+		System.out.println(dao.getCommentsList());
+	}
+	@GET
+	@Path("/commentsPending/manifestacija={manifestacija}")
+	public List<Comment> getCommentsPending(@PathParam("manifestacija") String manifestacija){
+		CommentDAO dao = (CommentDAO) ctx.getAttribute("commentDAO");
+		return dao.findByManifestation(manifestacija, CommentStatus.PENDING);
+	}
+	@GET
+	@Path("/commentUpdate/manifestacija={manifestacija}/korisnik={korisnik}/grade={grade}/text={text}/status={status}")
+	public void commentUpdate(@PathParam("manifestacija") String manifestacija,@PathParam("korisnik") String korisnik,
+			@PathParam("text") String text, @PathParam("grade") String grade,@PathParam("status") CommentStatus status) {
+		CommentDAO dao = (CommentDAO) ctx.getAttribute("commentDAO");
+		Comment c = dao.updateStatus(korisnik.split("-")[0], manifestacija, text, grade,status);
+		System.out.println(c);
+	}
 }

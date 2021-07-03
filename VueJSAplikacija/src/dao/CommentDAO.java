@@ -26,7 +26,10 @@ public class CommentDAO {
 	public CommentDAO(String path, ManifestationDAO mDAO, CardDAO cDAO, UserDAO uDAO) {
 		loadComments(path);
 	}
-	
+	public Comment save(Comment c) {
+		commentsList.add(c);
+		return c;
+	}
 	public void loadComments(String path) {
 		BufferedReader in = null;
 		try {
@@ -53,11 +56,11 @@ public class CommentDAO {
 			}
 		}
 	}
-
-	public List<Comment> findByManifestation(String manifestation){
+	
+	public List<Comment> findByManifestation(String manifestation,CommentStatus status){
 		ArrayList<Comment> commentsManif = new ArrayList<Comment>();
 		for(Comment c: commentsList) {
-			if(c.getManifestation().equals(manifestation)) {
+			if(c.getManifestation().equals(manifestation) && c.getStatus().equals(status)) {
 				commentsManif.add(c);
 				}
 		}
@@ -71,6 +74,15 @@ public class CommentDAO {
 				}
 		}
 		return commentsManif;
+	}
+	public Comment updateStatus(String user,String manifestation, String text, String grade,CommentStatus status) {
+		for(Comment c: commentsList) {
+			if(c.getText().equals(text) && c.getManifestation().equals(manifestation) && c.getGrade().equals(grade) && c.getStatus().equals(CommentStatus.PENDING)) {
+				c.setStatus(status);
+				return c;
+			}
+		}
+		return null;
 	}
 	public HashMap<String, Comment> getComments() {
 		return comments;
@@ -89,6 +101,17 @@ public class CommentDAO {
 
 	public void setCommentsList(ArrayList<Comment> commentsList) {
 		this.commentsList = commentsList;
+	}
+
+
+	public List<Comment> findByManifestation(String manifestation) {
+		ArrayList<Comment> commentsManif = new ArrayList<Comment>();
+		for(Comment c: commentsList) {
+			if(c.getManifestation().equals(manifestation)) {
+				commentsManif.add(c);
+				}
+		}
+		return commentsManif;
 	}
 	
 }

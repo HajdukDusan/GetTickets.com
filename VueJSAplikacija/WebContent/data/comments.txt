@@ -1,5 +1,8 @@
-user,manifestation,text,grade,status
-Pera,Exit 2020,asdsadsadsad,1,APPROVED
-Pera,Exit 2021,super,1,APPROVED
-Pera,Exit 2021,super,4,APPROVED
-Pera,Exit 2021,super,3,APPROVED
+user,manifestation,text,grade
+Pera,Exit 2023,asdsadsadsad,1,PENDING
+Pera,Exit 2023,super,1,PENDING
+Pera,Exit 2023,super,4,APPROVED
+Pera,Exit 2022,super,3,PENDING
+Pera,Exit 2022,super,3,PENDING
+Pera,Exit 2022,super,3,PENDING
+Pera,Exit 2022,super,3,PENDING

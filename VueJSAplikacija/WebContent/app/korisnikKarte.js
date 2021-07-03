@@ -51,7 +51,7 @@ Vue.component("korisnik-karte", {
 
     `,
   methods: {
-      checkDate(card) {
+    checkDate(card) {
       var today = new Date();
       var nextWeek = new Date(
         today.getFullYear(),

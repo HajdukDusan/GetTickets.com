@@ -80,10 +80,17 @@ public class CardService {
 		CardDAO dao = (CardDAO) ctx.getAttribute("cardDAO");
 		ManifestationDAO mDAO = (ManifestationDAO) ctx.getAttribute("manifestationDAO");
 		//pronadjemo korisnika
-		User u = userDAO.findUserCookie(cookie);		
+		User u = userDAO.findUserCookie(cookie);
+		Card c = dao.findCard(id);
+
 		
 		Double points = u.getCollectedPoints();
-		Card c = dao.findCard(id);
+		points = points - Double.valueOf(c.getPrice())/1000 * 133 * 4;
+		System.out.println(points);
+		u.setCollectedPoints(points);
+		u.getUserType().checkPoints(u.getCollectedPoints());
+		u.getpCardsIds().add(c.getId());
+		userDAO.save(u);
 		c.setStatus(false);
 		dao.save(c);
 		
@@ -141,4 +148,5 @@ public class CardService {
 		}
 		return Response.ok("Uspesno ste kupili karte", MediaType.APPLICATION_JSON).build();
 	}
+
 }
