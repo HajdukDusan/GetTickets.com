@@ -1,8 +1,10 @@
 package dao;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,7 @@ import beans.User;
 
 public class CommentDAO {
 	
-	
+	String pathcmt;
 	
 	private HashMap<String, Comment> comments= new HashMap<String,Comment>();
 	private ArrayList<Comment> commentsList = new ArrayList<Comment>();
@@ -25,9 +27,27 @@ public class CommentDAO {
 	
 	public CommentDAO(String path, ManifestationDAO mDAO, CardDAO cDAO, UserDAO uDAO) {
 		loadComments(path);
+		pathcmt = path;
 	}
 	public Comment save(Comment c) {
 		commentsList.add(c);
+		BufferedWriter out = null;
+		try {
+			File file = new File(pathcmt);
+			System.out.println(pathcmt);
+			out = new BufferedWriter(new FileWriter(file, true));
+			out.write(c.toString());
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if ( out != null ) {
+				try {
+					out.close();
+				}
+				catch (Exception e) { }
+			}
+		}
 		return c;
 	}
 	public void loadComments(String path) {

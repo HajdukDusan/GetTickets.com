@@ -176,12 +176,41 @@ public class User {
 	public void setUserType(UserType userType) {
 		this.userType = userType;
 	}
-	@Override
-	public String toString() {
-		return "User [username=" + username + ", password=" + password + ", name=" + name + ", surname=" + surname
-				+ ", gender=" + gender + ", birthDate=" + birthDate + ", userType=" + userType + ", collectedPoints="
-				+ collectedPoints + ", role=" + role + ", pCards=" + pCardsIds + ", manifestations=" + manifestationsIds
-				+ "]";
+
+	public String toStringUser() {
+		
+		String tmp = "";
+		for(int i = 0; i < pCardsIds.size(); i++) {
+			if(i != 0) {
+				tmp += ";" + pCardsIds.get(i);
+			}
+			else {
+				tmp += pCardsIds.get(i);
+			}
+		}
+		
+		return  role + "," + username + "," + password + "," + name + "," + surname
+				+ "," + gender + "," + birthDate + "," + collectedPoints + "," + userType + ","
+				+ isDeleted  + "," + tmp + "\n";
+	}
+	public String toStringWorker() {
+		
+		String tmp = "";
+		for(int i = 0; i < manifestationsIds.size(); i++) {
+			if(i != 0) {
+				tmp += ";" + manifestationsIds.get(i);
+			}
+			else {
+				tmp += manifestationsIds.get(i);
+			}
+		}
+		
+		return  role + "," + username + "," + password + "," + name + "," + surname
+				+ "," + gender + "," + birthDate + "," + isDeleted + "," + tmp + "\n";
+	}
+	public String toStringAdmin() {
+		return  role + "," + username + "," + password + "," + name + "," + surname
+				+ "," + gender + "," + birthDate + "," + isDeleted + "\n";
 	}
 	public Integer getNumOfPenals() {
 		return numOfPenals;

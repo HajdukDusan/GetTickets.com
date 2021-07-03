@@ -1,8 +1,10 @@
 package dao;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,8 +17,11 @@ import beans.Card.CardType;
 
 public class CardDAO {
 
+	String cardPath;
+	
 	public CardDAO(String path,ManifestationDAO mDAO) {
 		loadCards(path,mDAO);
+		cardPath = path;
 	}
 	
 	
@@ -89,7 +94,23 @@ public class CardDAO {
 	public void save(Card c) {
 		cards.put(c.getId(),c);
 		cardsList.add(c);
+		BufferedWriter out = null;
+		try {
+			File file = new File(cardPath);
+			System.out.println(cardPath);
+			out = new BufferedWriter(new FileWriter(file, true));
+			out.write(c.toString());
 		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if ( out != null ) {
+				try {
+					out.close();
+				}
+				catch (Exception e) { }
+			}
+		}
 	}
 	public HashMap<String, Card> getCards() {
 		return cards;

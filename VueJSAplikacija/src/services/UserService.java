@@ -86,6 +86,27 @@ public class UserService {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		return dao.getUsersList();
 	}
+	@GET
+	@Path("/blokiraj/name={name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response blockUser(@PathParam("name") String name){
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		User u = dao.findUser(name);
+		u.setBlocked(true);
+		dao.save(u);
+		return  Response.ok("", MediaType.APPLICATION_JSON).build();
+	}
+	@GET
+	@Path("/testblokiran/name={name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response testblokiran(@PathParam("name") String name){
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		User u = dao.findUser(name);
+		if(u.isBlocked()) {
+			return  Response.ok("blokiran", MediaType.APPLICATION_JSON).build();
+		}
+		return  Response.ok("", MediaType.APPLICATION_JSON).build();
+	}
 	@POST
 	@Path("/registerUser")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -170,8 +191,6 @@ public class UserService {
 	public Collection<User> getUsersWithPenals(){
 		
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
-		
-		System.out.println("KITA");
 
 		return dao.getUsersWithPenals();
 	}

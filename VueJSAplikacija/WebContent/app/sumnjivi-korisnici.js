@@ -39,6 +39,8 @@ Vue.component("sumnjivi-korisnici", {
                     
                     <h5> Broj Otkazivanja: {{korisnik.numOfPenals}}</h5>
 
+<b-button v-on:click="Blokiraj(korisnik)" variant="danger">Blokiraj</b-button>
+
                      </b-card>
                      
                     </b-col>
@@ -57,6 +59,15 @@ Vue.component("sumnjivi-korisnici", {
         )
         .then((response) => {
           this.korisnici = response.data;
+        });
+    },
+    Blokiraj(korisnik) {
+      axios
+        .get(
+          `rest/user/blokiraj/name=${korisnik.name}`
+        )
+        .then((response) => {
+			this.loadKorisnici();
         });
     },
   },

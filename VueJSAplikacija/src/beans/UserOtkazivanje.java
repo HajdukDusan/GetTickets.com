@@ -14,5 +14,12 @@ public class UserOtkazivanje {
 		idCard = idc;
 		timeOfCancel = time;
 	}
+
+	@Override
+	public String toString() {
+		return  username + "," + idCard + "," + timeOfCancel;
+	}
+	
+	
 	
 }
