@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -25,6 +27,7 @@ import beans.Card;
 import beans.Card.CardType;
 import beans.Manifestation;
 import beans.User;
+import beans.UserOtkazivanje;
 import dao.CardDAO;
 import dao.ManifestationDAO;
 import dao.UserDAO;
@@ -86,6 +89,7 @@ public class CardService {
 		//pronadjemo korisnika
 		User u = userDAO.findUserCookie(cookie);
 		Card c = dao.findCard(id);
+
 		
 		Double points = u.getCollectedPoints();
 		points = points - Double.valueOf(c.getPrice())/1000 * 133 * 4;
@@ -96,6 +100,10 @@ public class CardService {
 		userDAO.save(u);
 		c.setStatus(false);
 		dao.save(c);
+		
+		
+		UserOtkazivanje uot = new UserOtkazivanje(u.getUsername(), c.getId(), LocalDate.now());
+		userDAO.saveUserOtkazivanjetoFile(uot);
 		
 	}
 	@GET

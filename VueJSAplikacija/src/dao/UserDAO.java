@@ -1,21 +1,32 @@
 package dao;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+
+import javax.print.attribute.HashPrintJobAttributeSet;
+
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 import beans.Card;
 import beans.Manifestation;
 import beans.User;
+import beans.UserOtkazivanje;
 import beans.UserType;
 
 // Ucitavamo korisnike iz
@@ -25,9 +36,93 @@ public class UserDAO {
 	
 	private HashMap<String, User> users= new HashMap<String,User>();
 	private ArrayList<User> usersList = new ArrayList<User>();
+	String pathOtkaz;
+	String pathUsrs;
+	public HashMap<String, Integer> usersOtkazivanja = new HashMap<String, Integer>();
 	
-	public UserDAO(String path,ManifestationDAO mDAO,CardDAO cDAO) {
+	public void incrementOtkazivanje(String name) {
+		Integer i = usersOtkazivanja.get(name);
+		if(i == null) {
+			i = 0;
+		}
+		i += 1;
+		usersOtkazivanja.put(name, i);
+	}
+	
+	public void saveUserOtkazivanjetoFile(UserOtkazivanje u) {
+		incrementOtkazivanje(u.username);
+		try {
+			File file = new File(pathOtkaz);
+			System.out.println(pathOtkaz);
+			FileWriter fw = new FileWriter(file,true);
+	    	BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter(bw);
+			pw.println(u.toString());
+			pw.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public ArrayList<User> getUsersWithPenals() {
+		ArrayList<User> users = new ArrayList<User>();
+		for(User m:usersList) {
+			if(usersOtkazivanja.get(m.getUsername()) == null) {
+				m.setNumOfPenals(0);
+			} else{
+				m.setNumOfPenals(usersOtkazivanja.get(m.getUsername()));
+				if(usersOtkazivanja.get(m.getUsername())>=3 && m.isBlocked()==false) {
+					users.add(m);
+				}
+			}
+		}
+		return users;
+	}
+	
+	public void loadOtkazivanja(String path) {
+		ArrayList<UserOtkazivanje> tmp = new ArrayList<UserOtkazivanje>();
+		BufferedReader in = null;
+		try {
+			File file = new File(path);
+			in = new BufferedReader(new FileReader(file));
+			String line;
+			String[] params;
+			line = in.readLine();
+			while ((line = in.readLine()) != null) {
+				params = line.split(",");
+				tmp.add(new UserOtkazivanje(params[0], params[1], LocalDate.parse(params[2])));
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if ( in != null ) {
+				try {
+					in.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+		
+		for(UserOtkazivanje u : tmp) {
+			if(u.timeOfCancel.getMonth().toString().equals(LocalDate.now().getMonth().toString())) {
+				Integer num = usersOtkazivanja.get(u.username);
+				if(num == null) {
+					num = 0;
+				}
+				num += 1;
+				usersOtkazivanja.put(u.username, num);
+				System.out.println(usersOtkazivanja.get(u.username));
+			}
+		}
+	}
+	
+	public UserDAO(String path,String otkazivanjaPath, ManifestationDAO mDAO,CardDAO cDAO) {
+		System.out.println(path);
+		System.out.println(otkazivanjaPath);
 		loadUsers(path,mDAO,cDAO);
+		pathUsrs = path;
+		pathOtkaz = otkazivanjaPath;
+		loadOtkazivanja(otkazivanjaPath);
 	}
 
 	public UserDAO(String contextPath) {
@@ -63,6 +158,33 @@ public class UserDAO {
 		users.put(user.getUsername(),user);
 		Collection<User> values = users.values();
 		usersList = new ArrayList<>(values);
+		/*
+		BufferedWriter out = null;
+		try {
+			File file = new File(pathUsrs);
+			System.out.println(pathUsrs);
+			out = new BufferedWriter(new FileWriter(file));
+			if(user.getRole().equals("user")) {
+				//out.write(user.toStringUser());
+			}
+			else if(user.getRole().equals("worker")) {
+				//out.write(user.toStringWorker());
+			}
+			else if(user.getRole().equals("admin")) {
+				//out.write(user.toStringAdmin());
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if ( out != null ) {
+				try {
+					out.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+		*/
 		return user;
 		
 	}
@@ -91,6 +213,7 @@ public class UserDAO {
 					User user = generateUser(params,cDAO.getCards());
 					users.put(user.getUsername(),user);
 					usersList.add(user);
+					usersOtkazivanja.put(user.getUsername(), 0);
 				}
 				
 			}
@@ -136,6 +259,7 @@ public class UserDAO {
 			}
 		}
 
+		
 		
 		User user = new User(data[0],data[1],data[2],data[3],data[4],data[5],date,Double.valueOf(data[7]),userType,pCards,Boolean.valueOf(data[9]),Boolean.valueOf(data[10]));
 		user.setpCardsIds(pCardsIds);

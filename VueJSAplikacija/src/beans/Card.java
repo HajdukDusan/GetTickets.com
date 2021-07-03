@@ -76,5 +76,13 @@ public class Card {
 	public void setCardType(CardType cardType) {
 		this.cardType = cardType;
 	}
+	@Override
+	public String toString() {
+		return id + "," + manifestation + "," + manifestationDate
+				+ "," + price + "," + buyersName + "," + buyersSurname + ","
+				+ status + "," + cardType + "\n";
+	}
+	
+	
 	
 }

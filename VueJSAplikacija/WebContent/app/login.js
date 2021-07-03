@@ -5,11 +5,14 @@ Vue.component("login", {
         username: "",
         password: "",
       },
+      blocked: false,
     };
   },
   template: `
   <div>
         <default-nav></default-nav>
+
+<b-alert style="text-align: center;" v-model="blocked" variant="danger"> Nalog je blokiran, odblokirace se prvog u mesecu! </b-alert>
 
       <b-card id="page_content">
         <b-form @submit="onSubmit" >
@@ -37,7 +40,23 @@ Vue.component("login", {
      `,
   methods: {
     onSubmit() {
-      axios
+    
+    
+          axios
+        .get(`rest/user/testblokiran/name=${this.form.username}`)
+        .then((response) => {
+          console.log(response.data);
+          if(response.data === "blokiran") {
+          	this.blocked = true;
+          }
+          else{
+          this.blocked = false;
+          this.login();
+          }
+        })
+    },
+    login(){
+          axios
         .get(`rest/user/loginUser/${this.form.username}/${this.form.password}`)
         .then((response) => {
           console.log(response.data);
@@ -51,6 +70,7 @@ Vue.component("login", {
           console.log("Greska.");
           alert("Uneti nevalidni ili nepostojeći parametri, pokušajte ponovo.");
         });
-    },
+    
+    }
   },
 });

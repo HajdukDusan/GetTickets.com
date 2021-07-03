@@ -33,6 +33,7 @@ public class UserService {
 			String path = ctx.getRealPath("/") + "data\\manifestations.txt";
 			String path1 = ctx.getRealPath("/")+ "data\\cards.txt";
 			String path2 = ctx.getRealPath("/")+ "data\\users.txt";
+			String path3 = ctx.getRealPath("/")+ "data\\otkazivanja.txt";
 			if(ctx.getAttribute("manifestationDAO")== null) {
 				ManifestationDAO mDAO = new ManifestationDAO(path);
 				ctx.setAttribute("manifestationDAO", mDAO);
@@ -42,7 +43,7 @@ public class UserService {
 				ctx.setAttribute("cardDAO", cDAO);
 			}
 
-			ctx.setAttribute("userDAO", new UserDAO(path2,(ManifestationDAO) ctx.getAttribute("manifestationDAO"),(CardDAO) ctx.getAttribute("cardDAO")));
+			ctx.setAttribute("userDAO", new UserDAO(path2, path3,(ManifestationDAO) ctx.getAttribute("manifestationDAO"),(CardDAO) ctx.getAttribute("cardDAO")));
 		}
 	}
 	
@@ -84,6 +85,27 @@ public class UserService {
 	public Collection<User> getUsers(){
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		return dao.getUsersList();
+	}
+	@GET
+	@Path("/blokiraj/name={name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response blockUser(@PathParam("name") String name){
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		User u = dao.findUser(name);
+		u.setBlocked(true);
+		dao.save(u);
+		return  Response.ok("", MediaType.APPLICATION_JSON).build();
+	}
+	@GET
+	@Path("/testblokiran/name={name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response testblokiran(@PathParam("name") String name){
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		User u = dao.findUser(name);
+		if(u == null || u.isBlocked()) {
+			return  Response.ok("blokiran", MediaType.APPLICATION_JSON).build();
+		}
+		return  Response.ok("", MediaType.APPLICATION_JSON).build();
 	}
 	@POST
 	@Path("/registerUser")
@@ -160,5 +182,16 @@ public class UserService {
 		}
 
 		return dao.getUsersSearched(ime, prezime, korisnickoIme, tipKorisnika, desc, sortBy);
+	}
+	
+	@GET
+	@Path("/usersWithPenals")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<User> getUsersWithPenals(){
+		
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+
+		return dao.getUsersWithPenals();
 	}
 }   

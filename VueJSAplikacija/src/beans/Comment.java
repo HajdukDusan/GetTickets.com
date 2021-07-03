@@ -61,4 +61,12 @@ public class Comment {
 		this.status = cs;
 	}
 
+	@Override
+	public String toString() {
+		return  user + "," + manifestation + "," + text
+				+ "," + grade + "," + status + "\n";
+	}
+	
+	
+
 }
